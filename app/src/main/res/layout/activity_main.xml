@@ -9,10 +9,10 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/button_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_main"
-        android:layout_marginBottom="@dimen/margin_half"
         android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +41,16 @@
             android:text="@string/title_favourites"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"
-            app:iconSize="24dp" />
-
+            app:iconSize="@dimen/icon_favourites_button_size" />
     </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
