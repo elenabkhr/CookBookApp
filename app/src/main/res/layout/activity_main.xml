@@ -5,12 +5,12 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/background_color"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_main"
         android:layout_marginBottom="@dimen/margin_half"
         android:gravity="center_horizontal"
@@ -21,25 +21,26 @@
         <com.google.android.material.button.MaterialButton
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_between_button_half"
             android:layout_weight="1"
-            android:backgroundTint="@color/buttonCategories"
+            android:backgroundTint="@color/buttonCategories_color"
             android:includeFontPadding="false"
-            android:text="@string/button_categories" />
+            android:text="@string/title_categories" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_between_button_half"
             android:layout_weight="1"
-            android:backgroundTint="@color/buttonFavorites"
+            android:backgroundTint="@color/buttonFavorites_color"
+            android:gravity="center"
             android:includeFontPadding="false"
-            android:text="@string/button_favourites"
+            android:padding="0dp"
+            android:text="@string/title_favourites"
             app:icon="@drawable/ic_heart_empty"
-            app:iconGravity="end"
-            app:iconPadding="3dp"
+            app:iconGravity="textEnd"
             app:iconSize="24dp" />
 
     </LinearLayout>

@@ -7,7 +7,7 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException(
-            "Binding for ActivityLearnWordBinding " +
+            "Binding for ActivityMainBinding " +
                     "must not be null"
         )
 
