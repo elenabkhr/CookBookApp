@@ -19,6 +19,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavCategories"
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +30,7 @@
             android:text="@string/title_categories" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavFavorites"
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

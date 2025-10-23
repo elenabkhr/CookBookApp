@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.practicum.cookbookapp.databinding.ActivityMainBinding
 import androidx.fragment.app.commit
 import androidx.fragment.app.add
+import androidx.fragment.app.replace
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -32,12 +33,27 @@ class MainActivity : AppCompatActivity() {
             )
             insets
         }
-        val fragmentManager = supportFragmentManager
 
-        fragmentManager.commit {
+        supportFragmentManager.commit {
             setReorderingAllowed(true)
             add<CategoriesListFragment>(R.id.mainContainer)
             addToBackStack(null)
+        }
+
+        binding.btnNavFavorites.setOnClickListener {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace<FavoritesFragment>(R.id.mainContainer)
+                addToBackStack(null)
+            }
+        }
+
+        binding.btnNavCategories.setOnClickListener {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace<CategoriesListFragment>(R.id.mainContainer)
+                addToBackStack(null)
+            }
         }
     }
 }
