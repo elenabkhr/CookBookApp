@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.practicum.cookbookapp.databinding.ActivityMainBinding
 import androidx.fragment.app.commit
+import androidx.fragment.app.add
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -18,13 +19,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
-
         _binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
-
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(
@@ -39,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         fragmentManager.commit {
             setReorderingAllowed(true)
-            replace(R.id.mainContainer, CategoriesListFragment())
+            add<CategoriesListFragment>(R.id.mainContainer)
             addToBackStack(null)
         }
     }
