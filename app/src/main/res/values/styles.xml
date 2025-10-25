@@ -13,4 +13,11 @@
         <item name="cornerRadius">@dimen/corner_radius_nav_button</item>
     </style>
 
+    <style name="StyleTitle20" parent="TextAppearance.AppCompat">
+        <item name="textAllCaps">true</item>
+        <item name="android:textSize">@dimen/text_size_title_categories</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textColor">@color/text_title_categories</item>
+    </style>
+
 </resources>

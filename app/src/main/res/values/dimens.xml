@@ -5,7 +5,10 @@
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_between_button_half">2dp</dimen>
     <dimen name="text_size_nav_button">14sp</dimen>
+    <dimen name="text_size_title_categories">20sp</dimen>
+    <dimen name="indent_title_categories">10dp</dimen>
     <dimen name="corner_radius_nav_button">8dp</dimen>
+    <dimen name="shape_rounded_radius">8dp</dimen>
     <dimen name="icon_favourites_button_size">24dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 

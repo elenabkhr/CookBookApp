@@ -5,4 +5,5 @@
     <color name="buttonFavorites_color">#E13E3E</color>
     <color name="buttonCategories_color">#525DC0</color>
     <color name="background_color">#F4FAFF</color>
+    <color name="text_title_categories">#5F3678</color>
 </resources>
