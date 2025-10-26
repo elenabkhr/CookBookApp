@@ -2,4 +2,6 @@
     <string name="app_name">CookBookApp</string>
     <string name="title_categories">Категории</string>
     <string name="title_favourites">Избранное</string>
+    <string name="img_category_header">Общая обложка каталога</string>
+    <string name="image_card_category">"Фото категории "</string>
 </resources>
