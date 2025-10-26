@@ -9,13 +9,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="224dp">
+        android:layout_height="@dimen/height_header_categories">
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:importantForAccessibility="no"
+            android:contentDescription="@string/img_category_header"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_categories" />
 
@@ -23,23 +23,20 @@
             style="@style/StyleTitle20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/indent_title_categories"
-            android:layout_marginBottom="@dimen/indent_title_categories"
+            android:layout_marginStart="@dimen/padding_margin_title_categories"
+            android:layout_marginBottom="@dimen/padding_margin_title_categories"
             android:background="@drawable/shape_rounded_categories"
-            android:paddingHorizontal="@dimen/indent_title_categories"
-            android:paddingVertical="@dimen/indent_title_categories"
+            android:padding="@dimen/padding_margin_title_categories"
             android:text="@string/title_categories"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/margin_half"
-        android:layout_marginVertical="@dimen/margin_half"
+        android:layout_margin="@dimen/margin_half"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         tools:itemCount="6"

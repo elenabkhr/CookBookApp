@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="156dp"
-    android:layout_height="220dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margin_half"
     android:layout_marginVertical="@dimen/margin_half"
     android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
     app:cardCornerRadius="@dimen/shape_rounded_radius">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/image_card_category"
+            android:scaleType="center"
+            android:src="@drawable/ic_categories"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/StyleTitleCard14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginTop="@dimen/margin_half"
+            android:text="Название"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            style="@style/StyleDescriptionCard12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_half"
+            android:text="Рецепты всех популярных видов бургеров Рецепты всех популярных видов бургеров"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
