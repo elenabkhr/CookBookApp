@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margin_half"
     android:layout_marginVertical="@dimen/margin_half"
@@ -11,40 +12,40 @@
     app:cardCornerRadius="@dimen/shape_rounded_radius">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/ivCardCategories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="130dp"
             android:contentDescription="@string/image_card_category"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_categories"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tvCategoriesTitle"
             style="@style/StyleTitleCard14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_half"
             android:layout_marginTop="@dimen/margin_half"
-            android:text="Название"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/ivCardCategories"
+            tools:text="Название" />
 
         <TextView
+            android:id="@+id/tvCategoriesDescription"
             style="@style/StyleDescriptionCard12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_half"
-            android:text="Рецепты всех популярных видов бургеров Рецепты всех популярных видов бургеров"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
+            app:layout_constraintTop_toBottomOf="@+id/tvCategoriesTitle"
+            tools:text="Рецепты всех популярных видов бургеров" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

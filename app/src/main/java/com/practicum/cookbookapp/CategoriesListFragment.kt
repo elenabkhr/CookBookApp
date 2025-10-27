@@ -11,8 +11,7 @@ class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException(
-            "Binding for FragmentListCategoriesBinding " +
-                    "must not be null"
+            "Binding for FragmentListCategoriesBinding must not be null"
         )
 
     override fun onCreateView(
@@ -24,8 +23,18 @@ class CategoriesListFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecycler()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initRecycler() {
+        val categoriesAdapter = CategoriesListAdapter(STUB.getCategories())
+        binding.rvCategories.adapter = categoriesAdapter
     }
 }
