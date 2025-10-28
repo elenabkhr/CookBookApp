@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/ivCardCategories"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/height_iv_card_categories"
             android:contentDescription="@string/image_card_category"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_categories"

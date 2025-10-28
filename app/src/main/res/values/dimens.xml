@@ -7,6 +7,7 @@
 
     <dimen name="icon_favourites_button_size">24dp</dimen>
     <dimen name="height_header_categories">224dp</dimen>
+    <dimen name="height_iv_card_categories">130dp</dimen>
 
     <dimen name="corner_radius_nav_button">8dp</dimen>
     <dimen name="shape_rounded_radius">8dp</dimen>
