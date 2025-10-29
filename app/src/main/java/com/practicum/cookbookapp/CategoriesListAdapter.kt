@@ -17,6 +17,16 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         val descriptionTextView = binding.tvCategoriesDescription
     }
 
+    interface OnItemClickListener {
+        fun onItemClick()
+    }
+
+    var itemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
         val binding = ItemCategoryBinding.inflate(inflater, viewGroup, false)
@@ -38,6 +48,10 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             null
         }
         viewHolder.imageView.setImageDrawable(drawable)
+
+        viewHolder.itemView.setOnClickListener {
+            itemClickListener?.onItemClick()
+        }
     }
 
     override fun getItemCount() = dataSet.size
