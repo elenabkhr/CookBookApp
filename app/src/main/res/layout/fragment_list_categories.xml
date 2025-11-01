@@ -12,7 +12,7 @@
         android:layout_height="@dimen/height_header_categories">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/imCategories"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/img_category_header"
