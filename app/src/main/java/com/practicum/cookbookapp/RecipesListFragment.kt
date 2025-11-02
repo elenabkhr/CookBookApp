@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
+
+const val ARG_RECIPE = "arg_recipe"
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
@@ -37,15 +38,15 @@ class RecipesListFragment : Fragment() {
         categoryName = requireArguments().getString(ARG_CATEGORY_NAME)
         categoryImageUrl = requireArguments().getString(ARG_CATEGORY_IMAGE_URL)
 
-            val drawable = try {
-                Drawable.createFromStream(
-                    categoryImageUrl?.let { requireContext().assets.open(it) },
-                    null
-                )
-            } catch (e: Exception) {
-                Log.e("!!!", "Image not found ${categoryImageUrl}, $e")
+        val drawable = try {
+            Drawable.createFromStream(
+                categoryImageUrl?.let { requireContext().assets.open(it) },
                 null
-            }
+            )
+        } catch (e: Exception) {
+            Log.e("!!!", "Image not found ${categoryImageUrl}, $e")
+            null
+        }
 
         binding.imCategory.setImageDrawable(drawable)
         binding.tvCategory.text = categoryName
@@ -70,9 +71,16 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipes(recipeId: Int) {
+        val recipe = STUB.getRecipeById(recipeId)
+        val bundle = Bundle()
+        bundle.putParcelable(ARG_RECIPE, recipe)
+
+        val recipeFragment = RecipeFragment()
+        recipeFragment.arguments = bundle
+
         parentFragmentManager.commit {
             setReorderingAllowed(true)
-            add<RecipeFragment>(R.id.mainContainer)
+            replace(R.id.mainContainer, recipeFragment)
             addToBackStack(null)
         }
     }
