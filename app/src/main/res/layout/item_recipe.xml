@@ -18,7 +18,7 @@
             android:id="@+id/ivCardRecipe"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_iv_card_recipes"
-            android:contentDescription="@string/image_card_category"
+            android:contentDescription="@string/img_card_category"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_categories"
             app:layout_constraintEnd_toEndOf="parent"

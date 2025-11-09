@@ -1,14 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color">
 
-    <TextView
-        android:id="@+id/tvFragmentRecipeTitle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:text="fragment_recipe" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/imRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_header_categories"
+            android:contentDescription="@string/img_recipe"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_categories" />
+
+        <TextView
+            android:id="@+id/tvRecipe"
+            style="@style/StyleTitle20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_title"
+            android:layout_marginBottom="@dimen/margin_title_bottom"
+            android:background="@drawable/shape_rounded_categories"
+            android:padding="@dimen/padding_title"
+            app:layout_constraintBottom_toBottomOf="@id/imRecipe"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/title_recipe" />
+
+        <TextView
+            android:id="@+id/tvIngredient"
+            style="@style/StyleTitle20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_main"
+            android:layout_marginEnd="@dimen/margin_main"
+            android:text="@string/title_ingredients"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imRecipe" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_main"
+            android:layout_marginEnd="@dimen/margin_main"
+            app:cardCornerRadius="@dimen/shape_rounded_radius"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvIngredient" />
+
+        <TextView
+            android:id="@+id/tvMethod"
+            style="@style/StyleTitle20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_main"
+            android:layout_marginEnd="@dimen/margin_main"
+            android:text="@string/title_method"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvIngredients" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMethod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_main"
+            android:layout_marginTop="@dimen/margin_main"
+            android:layout_marginEnd="@dimen/margin_main"
+            android:paddingBottom="@dimen/margin_main"
+            app:cardCornerRadius="@dimen/shape_rounded_radius"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMethod"
+            app:layout_goneMarginStart="@dimen/margin_main" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

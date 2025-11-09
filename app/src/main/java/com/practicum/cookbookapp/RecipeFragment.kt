@@ -1,12 +1,17 @@
 package com.practicum.cookbookapp
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.divider.MaterialDividerItemDecoration
 
 class RecipeFragment : Fragment() {
 
@@ -29,18 +34,51 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
-        } else {
-            arguments?.getParcelable(ARG_RECIPE)
-        }
-
-        binding.tvFragmentRecipeTitle.text = recipe?.title
+        initUI()
+        initRecycler()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initUI() {
+        recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
+        } else {
+            arguments?.getParcelable(ARG_RECIPE)
+        }
+        binding.tvRecipe.text = recipe?.title
+
+        val drawable = try {
+            Drawable.createFromStream(
+                recipe?.imageUrl?.let { requireContext().assets.open(it) },
+                null
+            )
+        } catch (e: Exception) {
+            Log.e("!!!", "Image not found ${recipe?.imageUrl}, $e")
+            null
+        }
+        binding.imRecipe.setImageDrawable(drawable)
+    }
+
+    private fun initRecycler() {
+        binding.rvIngredients.adapter = recipe?.ingredients?.let { IngredientsAdapter(it) }
+        val ingredientsDivider = MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        ingredientsDivider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+        ingredientsDivider.dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+        ingredientsDivider.dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.divider_inset)
+        ingredientsDivider.dividerInsetStart = resources.getDimensionPixelSize(R.dimen.divider_inset)
+        binding.rvIngredients.addItemDecoration(ingredientsDivider)
+
+        binding.rvMethod.adapter = recipe?.let { MethodAdapter(it.method) }
+        val methodDivider =
+            MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        methodDivider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+        methodDivider.dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+        methodDivider.dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.divider_inset)
+        methodDivider.dividerInsetStart = resources.getDimensionPixelSize(R.dimen.divider_inset)
+        binding.rvMethod.addItemDecoration(methodDivider)
     }
 }

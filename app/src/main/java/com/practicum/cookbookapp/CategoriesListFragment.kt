@@ -9,10 +9,6 @@ import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
 
-const val ARG_CATEGORY_ID = "categoryId"
-const val ARG_CATEGORY_NAME = "categoryName"
-const val ARG_CATEGORY_IMAGE_URL = "categoryImageUrl"
-
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding
