@@ -10,8 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
-const val ARG_RECIPE = "arg_recipe"
-
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
     private val binding
