@@ -10,8 +10,7 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
 
     class ViewHolder(private val binding: ItemIngredientsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val quantity = binding.tvIngredientsQuantity
-        val unitOfMeasure = binding.tvIngredientsUnitOfMeasure
+        val quantityUnitOfMeasure = binding.tvQuantityUnitOfMeasure
         val description = binding.tvIngredientsDescription
     }
 
@@ -27,8 +26,12 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
         viewHolder.description.text = ingredient.description
-        viewHolder.quantity.text = ingredient.quantity
-        viewHolder.unitOfMeasure.text = ingredient.unitOfMeasure
+
+        viewHolder.quantityUnitOfMeasure.text = viewHolder.itemView.context.getString(
+            R.string.quantity_unit_of_measure,
+            ingredient.quantity,
+            ingredient.unitOfMeasure
+        )
     }
 
     override fun getItemCount() = dataSet.size

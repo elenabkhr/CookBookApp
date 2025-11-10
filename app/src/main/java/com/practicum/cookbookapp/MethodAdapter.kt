@@ -21,7 +21,11 @@ class MethodAdapter(private val dataSet: List<String>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val item = dataSet[position]
-        viewHolder.method.text = item
+        viewHolder.method.text = viewHolder.itemView.context.getString(
+            R.string.string_method,
+            position + 1,
+            item
+        )
     }
 
     override fun getItemCount() = dataSet.size

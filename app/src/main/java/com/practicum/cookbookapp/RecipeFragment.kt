@@ -65,20 +65,25 @@ class RecipeFragment : Fragment() {
 
     private fun initRecycler() {
         binding.rvIngredients.adapter = recipe?.ingredients?.let { IngredientsAdapter(it) }
-        val ingredientsDivider = MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-        ingredientsDivider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-        ingredientsDivider.dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
-        ingredientsDivider.dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.divider_inset)
-        ingredientsDivider.dividerInsetStart = resources.getDimensionPixelSize(R.dimen.divider_inset)
+        val ingredientsDivider =
+            MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+                dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+                dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_12)
+                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
+                isLastItemDecorated = false
+            }
         binding.rvIngredients.addItemDecoration(ingredientsDivider)
 
         binding.rvMethod.adapter = recipe?.let { MethodAdapter(it.method) }
         val methodDivider =
-            MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-        methodDivider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-        methodDivider.dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
-        methodDivider.dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.divider_inset)
-        methodDivider.dividerInsetStart = resources.getDimensionPixelSize(R.dimen.divider_inset)
+            MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
+                dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+                dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_12)
+                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
+                isLastItemDecorated = false
+            }
         binding.rvMethod.addItemDecoration(methodDivider)
     }
 }
