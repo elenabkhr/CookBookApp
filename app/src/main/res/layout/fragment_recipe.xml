@@ -34,17 +34,58 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/title_recipe" />
 
-        <TextView
-            android:id="@+id/tvIngredient"
-            style="@style/StyleTitle20"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clIngredients"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_16"
             android:layout_marginTop="@dimen/padding_16"
             android:layout_marginEnd="@dimen/padding_16"
-            android:text="@string/title_ingredients"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imRecipe" />
+            app:layout_constraintTop_toBottomOf="@+id/imRecipe">
+
+            <TextView
+                android:id="@+id/tvIngredient"
+                style="@style/StyleTitle20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_ingredients"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvPositions"
+                style="@style/StylePortions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/portions"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvIngredient" />
+
+            <TextView
+                android:id="@+id/tvPortionsCount"
+                style="@style/StylePortions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_8"
+                android:text="1"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPositions"
+                app:layout_constraintStart_toEndOf="@+id/tvPositions"
+                app:layout_constraintTop_toTopOf="@+id/tvPositions" />
+
+            <SeekBar
+                android:id="@+id/sbPortions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:min="1"
+                android:progress="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPositions" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"
@@ -54,9 +95,11 @@
             android:layout_marginTop="@dimen/padding_16"
             android:layout_marginEnd="@dimen/padding_16"
             android:background="@drawable/shape_rounded_recipe"
+            android:paddingTop="@dimen/padding_4"
+            android:paddingBottom="@dimen/padding_4"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvIngredient" />
+            app:layout_constraintTop_toBottomOf="@id/clIngredients" />
 
         <TextView
             android:id="@+id/tvMethod"
@@ -78,7 +121,8 @@
             android:layout_marginTop="@dimen/padding_16"
             android:layout_marginEnd="@dimen/padding_16"
             android:background="@drawable/shape_rounded_recipe"
-            android:paddingBottom="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_4"
+            android:paddingBottom="@dimen/padding_4"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvMethod"

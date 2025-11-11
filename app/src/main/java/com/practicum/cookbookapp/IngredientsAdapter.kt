@@ -4,9 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.cookbookapp.databinding.ItemIngredientsBinding
+import java.util.Locale
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
+
+    var quantity: Int = 1
+
+    fun updateIngredients(progress: Int) {
+        quantity = progress
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(private val binding: ItemIngredientsBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -25,11 +33,19 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
-        viewHolder.description.text = ingredient.description
 
+        val newQuantity: Double = ingredient.quantity.toDouble() * quantity
+
+        val formatQuantity = if (newQuantity % 1 == 0.0) {
+            newQuantity.toInt().toString()
+        } else {
+            String.format(Locale.US, "%.1f", newQuantity)
+        }
+
+        viewHolder.description.text = ingredient.description
         viewHolder.quantityUnitOfMeasure.text = viewHolder.itemView.context.getString(
             R.string.quantity_unit_of_measure,
-            ingredient.quantity,
+            formatQuantity,
             ingredient.unitOfMeasure
         )
     }

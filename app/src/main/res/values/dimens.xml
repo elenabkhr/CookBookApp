@@ -6,6 +6,7 @@
     <dimen name="padding_10">10dp</dimen>
     <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_12">12dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
 
     <dimen name="icon_favourites_button_size">24dp</dimen>
     <dimen name="height_header_categories">224dp</dimen>
@@ -18,4 +19,5 @@
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_card_title_categories">20sp</dimen>
     <dimen name="text_size_card_description">12sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
 </resources>
