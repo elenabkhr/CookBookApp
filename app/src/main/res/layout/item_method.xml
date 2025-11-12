@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/padding_12"
-        android:paddingTop="@dimen/padding_12"
-        android:paddingBottom="@dimen/padding_8"
+        android:paddingVertical="@dimen/padding_8"
         tools:text="Разогрейте сковороду и обжаривайте фарш до готовности." />
 
 </LinearLayout>

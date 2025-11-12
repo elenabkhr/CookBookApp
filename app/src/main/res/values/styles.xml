@@ -43,4 +43,10 @@
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
 
+    <style name="StylePortions" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/text_description</item>
+        <item name="fontFamily">@font/montserrat_semi_bold</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
 </resources>

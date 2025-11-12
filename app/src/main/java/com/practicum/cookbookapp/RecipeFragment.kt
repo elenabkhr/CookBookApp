@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,7 +65,9 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        binding.rvIngredients.adapter = recipe?.ingredients?.let { IngredientsAdapter(it) }
+        val ingredientsAdapter = recipe?.let { IngredientsAdapter(it.ingredients) }
+        binding.rvIngredients.adapter = ingredientsAdapter
+
         val ingredientsDivider =
             MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
                 dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
@@ -85,5 +88,20 @@ class RecipeFragment : Fragment() {
                 isLastItemDecorated = false
             }
         binding.rvMethod.addItemDecoration(methodDivider)
+
+        binding.sbPortions.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                binding.tvPortionsCount.text = progress.toString()
+                ingredientsAdapter?.updateIngredients(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 }
