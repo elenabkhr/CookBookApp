@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.cookbookapp.databinding.ItemIngredientsBinding
-import java.util.Locale
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
@@ -34,12 +35,11 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val ingredient = dataSet[position]
 
-        val newQuantity: Double = ingredient.quantity.toDouble() * quantity
-
-        val formatQuantity = if (newQuantity % 1 == 0.0) {
-            newQuantity.toInt().toString()
+        val newQuantity = BigDecimal(ingredient.quantity) * BigDecimal(quantity.toString())
+        val formatQuantity = if (newQuantity.stripTrailingZeros().scale() <= 0) {
+            newQuantity.toBigInteger().toString()
         } else {
-            String.format(Locale.US, "%.1f", newQuantity)
+            newQuantity.setScale(1, RoundingMode.HALF_UP).toPlainString()
         }
 
         viewHolder.description.text = ingredient.description
