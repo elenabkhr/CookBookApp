@@ -68,10 +68,10 @@
             app:layout_constraintTop_toTopOf="@+id/tvPositions" />
 
         <SeekBar
+            style="@style/styleSeekBar"
             android:id="@+id/sbPortions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/padding_16"
             android:layout_marginTop="@dimen/padding_6"
             android:max="5"
             android:min="1"
@@ -108,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/padding_16"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="@dimen/padding_16"
             android:background="@drawable/shape_rounded_recipe"
             android:paddingVertical="@dimen/padding_4"

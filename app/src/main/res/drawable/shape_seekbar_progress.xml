@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/seekbar_progress" />
+    <corners android:radius="@dimen/radius_4" />
+    <size android:width="@dimen/width_progress_seekbar" />
+    <size android:height="@dimen/height_progress_seekbar" />
+</shape>
