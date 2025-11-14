@@ -14,8 +14,14 @@
     <dimen name="height_iv_card_categories">130dp</dimen>
     <dimen name="height_iv_card_recipes">100dp</dimen>
     <dimen name="divider_thickness">1dp</dimen>
+    <dimen name="width_progress_seekbar">328dp</dimen>
+    <dimen name="height_progress_seekbar">16dp</dimen>
+    <dimen name="width_thumb_seekbar">8dp</dimen>
+    <dimen name="height_thumb_seekbar">30dp</dimen>
 
     <dimen name="radius_8">8dp</dimen>
+    <dimen name="radius_4">4dp</dimen>
+    <dimen name="radius_2">2dp</dimen>
 
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_card_title_categories">20sp</dimen>
