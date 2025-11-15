@@ -62,6 +62,11 @@ class RecipeFragment : Fragment() {
             null
         }
         binding.imRecipe.setImageDrawable(drawable)
+
+        binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+        binding.ibHeart.setOnClickListener {
+            binding.ibHeart.setImageResource(R.drawable.ic_heart)
+        }
     }
 
     private fun initRecycler() {

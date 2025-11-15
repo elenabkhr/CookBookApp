@@ -9,6 +9,7 @@
     <string name="img_card_category">Фото категории</string>
     <string name="img_recipe">Фото рецепта</string>
     <string name="portions">Порции:</string>
+    <string name="img_button_heart">Добавить в избранное</string>
     <string name="quantity_unit_of_measure">%1$s %2$s</string>
     <string name="string_method">%1$d. %2$s</string>
 </resources>
