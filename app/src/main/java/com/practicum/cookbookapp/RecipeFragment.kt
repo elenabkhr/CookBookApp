@@ -1,5 +1,6 @@
 package com.practicum.cookbookapp
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.core.content.ContextCompat
 import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import androidx.core.content.edit
 
 class RecipeFragment : Fragment() {
 
@@ -63,9 +65,25 @@ class RecipeFragment : Fragment() {
         }
         binding.imRecipe.setImageDrawable(drawable)
 
-        binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
-        binding.ibHeart.setOnClickListener {
+        val recipeId = recipe?.id.toString()
+
+        if (getFavorites().contains(recipeId)) {
             binding.ibHeart.setImageResource(R.drawable.ic_heart)
+        } else {
+            binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+        }
+
+        binding.ibHeart.setOnClickListener {
+            val favorites = getFavorites()
+            if (favorites.contains(recipeId)) {
+                favorites.remove(recipeId)
+                binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+            } else {
+                favorites.add(recipeId)
+                binding.ibHeart.setImageResource(R.drawable.ic_heart)
+            }
+            saveFavorites(favorites)
+            binding.ibHeart
         }
     }
 
@@ -108,5 +126,18 @@ class RecipeFragment : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+    }
+
+    private fun saveFavorites(setStringId: Set<String>) {
+        val sharedPrefs = requireContext().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        sharedPrefs.edit {
+            putStringSet(FAVORITES_KEY, setStringId)
+        }
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val sharedPrefs = requireContext().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        val setString = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
+        return HashSet(setString)
     }
 }
