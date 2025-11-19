@@ -13,7 +13,7 @@
     </style>
 
     <style name="StyleDescriptionCard12" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">@dimen/text_size_card_description</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textColor">@color/text_description</item>
     </style>
@@ -25,7 +25,7 @@
 
     <style name="StyleTitle20" parent="TextAppearance.AppCompat">
         <item name="textAllCaps">true</item>
-        <item name="android:textSize">@dimen/text_size_card_title_categories</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
         <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
         <item name="android:textColor">@color/text_title_categories_color</item>
     </style>
@@ -47,6 +47,10 @@
         <item name="android:textColor">@color/text_description</item>
         <item name="fontFamily">@font/montserrat_semi_bold</item>
         <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="StyleFavoritesStub" parent="StylePortions">
+        <item name="fontFamily">@font/montserrat_regular</item>
     </style>
 
     <style name="StyleSeekBar" parent="Widget.AppCompat.SeekBar">

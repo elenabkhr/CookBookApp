@@ -83,7 +83,6 @@ class RecipeFragment : Fragment() {
                 binding.ibHeart.setImageResource(R.drawable.ic_heart)
             }
             saveFavorites(favorites)
-            binding.ibHeart
         }
     }
 

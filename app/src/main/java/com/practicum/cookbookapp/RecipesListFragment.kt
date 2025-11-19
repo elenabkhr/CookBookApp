@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -73,12 +74,9 @@ class RecipesListFragment : Fragment() {
         val bundle = Bundle()
         bundle.putParcelable(ARG_RECIPE, recipe)
 
-        val recipeFragment = RecipeFragment()
-        recipeFragment.arguments = bundle
-
         parentFragmentManager.commit {
             setReorderingAllowed(true)
-            replace(R.id.mainContainer, recipeFragment)
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
             addToBackStack(null)
         }
     }
