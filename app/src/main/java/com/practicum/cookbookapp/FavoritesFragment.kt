@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.practicum.cookbookapp.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment() {
@@ -33,8 +34,8 @@ class FavoritesFragment : Fragment() {
         initRecycler()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
@@ -68,7 +69,7 @@ class FavoritesFragment : Fragment() {
 
         parentFragmentManager.commit {
             setReorderingAllowed(true)
-            replace(R.id.mainContainer, recipeFragment)
+            replace<RecipeFragment>(R.id.mainContainer, args = bundle)
             addToBackStack(null)
         }
     }
