@@ -64,9 +64,6 @@ class FavoritesFragment : Fragment() {
         val bundle = Bundle()
         bundle.putParcelable(ARG_RECIPE, recipe)
 
-        val recipeFragment = RecipeFragment()
-        recipeFragment.arguments = bundle
-
         parentFragmentManager.commit {
             setReorderingAllowed(true)
             replace<RecipeFragment>(R.id.mainContainer, args = bundle)
