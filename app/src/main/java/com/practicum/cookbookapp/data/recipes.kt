@@ -1,4 +1,8 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.data
+
+import com.practicum.cookbookapp.model.Category
+import com.practicum.cookbookapp.model.Ingredient
+import com.practicum.cookbookapp.model.Recipe
 
 object STUB {
     private val burgerRecipes = listOf<Recipe>(

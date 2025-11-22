@@ -1,4 +1,4 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui.recipes.favorites
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.ui.recipes.recipe.RecipeFragment
+import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipeListAdapter
+import com.practicum.cookbookapp.data.ARG_RECIPE
+import com.practicum.cookbookapp.data.FAVORITES_KEY
+import com.practicum.cookbookapp.data.SP_NAME
+import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.databinding.FragmentFavoritesBinding
 
 class FavoritesFragment : Fragment() {

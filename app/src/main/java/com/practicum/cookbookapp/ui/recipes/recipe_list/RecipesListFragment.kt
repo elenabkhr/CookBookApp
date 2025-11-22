@@ -1,4 +1,4 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui.recipes.recipe_list
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -9,6 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.ui.recipes.recipe.RecipeFragment
+import com.practicum.cookbookapp.data.ARG_CATEGORY_ID
+import com.practicum.cookbookapp.data.ARG_CATEGORY_IMAGE_URL
+import com.practicum.cookbookapp.data.ARG_CATEGORY_NAME
+import com.practicum.cookbookapp.data.ARG_RECIPE
+import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {

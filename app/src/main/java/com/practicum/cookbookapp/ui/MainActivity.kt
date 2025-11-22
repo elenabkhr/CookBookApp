@@ -1,14 +1,17 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.practicum.cookbookapp.databinding.ActivityMainBinding
-import androidx.fragment.app.commit
 import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.databinding.ActivityMainBinding
+import com.practicum.cookbookapp.ui.categories.CategoriesListFragment
+import com.practicum.cookbookapp.ui.recipes.favorites.FavoritesFragment
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null

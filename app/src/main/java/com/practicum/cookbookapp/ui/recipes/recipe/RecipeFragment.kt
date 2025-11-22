@@ -1,4 +1,4 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui.recipes.recipe
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -15,6 +15,11 @@ import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.core.content.edit
+import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.data.ARG_RECIPE
+import com.practicum.cookbookapp.data.FAVORITES_KEY
+import com.practicum.cookbookapp.data.SP_NAME
+import com.practicum.cookbookapp.model.Recipe
 
 class RecipeFragment : Fragment() {
 
