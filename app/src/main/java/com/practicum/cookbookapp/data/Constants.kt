@@ -1,4 +1,4 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.data
 
 const val ARG_CATEGORY_ID = "categoryId"
 const val ARG_CATEGORY_NAME = "categoryName"

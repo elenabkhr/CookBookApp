@@ -1,4 +1,4 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipesListFragment
+import com.practicum.cookbookapp.data.ARG_CATEGORY_ID
+import com.practicum.cookbookapp.data.ARG_CATEGORY_IMAGE_URL
+import com.practicum.cookbookapp.data.ARG_CATEGORY_NAME
+import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {

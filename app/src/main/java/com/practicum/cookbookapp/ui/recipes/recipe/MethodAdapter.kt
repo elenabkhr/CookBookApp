@@ -1,8 +1,9 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui.recipes.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.databinding.ItemMethodBinding
 
 class MethodAdapter(private val dataSet: List<String>) :

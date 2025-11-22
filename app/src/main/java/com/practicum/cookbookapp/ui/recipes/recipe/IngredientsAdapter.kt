@@ -1,9 +1,11 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui.recipes.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.databinding.ItemIngredientsBinding
+import com.practicum.cookbookapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 

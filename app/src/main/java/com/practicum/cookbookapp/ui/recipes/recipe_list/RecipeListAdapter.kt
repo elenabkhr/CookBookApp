@@ -1,24 +1,25 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.ui.recipes.recipe_list
 
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.cookbookapp.databinding.ItemCategoryBinding
+import com.practicum.cookbookapp.databinding.ItemRecipeBinding
+import com.practicum.cookbookapp.model.Recipe
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
-    RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+class RecipeListAdapter(private val dataSet: List<Recipe>) :
+    RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
 
-    class ViewHolder(private val binding: ItemCategoryBinding) :
+    class ViewHolder(private val binding: ItemRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val imageView = binding.ivCardCategories
-        val titleTextView = binding.tvCategoriesTitle
-        val descriptionTextView = binding.tvCategoriesDescription
+
+        val imageView = binding.ivCardRecipe
+        val titleTextView = binding.tvRecipeTitle
     }
 
     interface OnItemClickListener {
-        fun onItemClick(categoryId: Int)
+        fun onItemClick(recipeId: Int)
     }
 
     var itemClickListener: OnItemClickListener? = null
@@ -29,28 +30,27 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
-        val binding = ItemCategoryBinding.inflate(inflater, viewGroup, false)
-        return ViewHolder(binding)
+        val binging = ItemRecipeBinding.inflate(inflater, viewGroup, false)
+        return ViewHolder(binging)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val category = dataSet[position]
-        viewHolder.titleTextView.text = category.title
-        viewHolder.descriptionTextView.text = category.description
+        val recipe = dataSet[position]
+        viewHolder.titleTextView.text = recipe.title
 
         val drawable = try {
             Drawable.createFromStream(
-                viewHolder.imageView.context.assets.open(category.imageUrl),
+                viewHolder.imageView.context.assets.open(recipe.imageUrl),
                 null
             )
         } catch (e: Exception) {
-            Log.e("!!!", "Image not found ${category.imageUrl}, $e")
+            Log.e("!!!", "Image not found ${recipe.imageUrl}, $e")
             null
         }
         viewHolder.imageView.setImageDrawable(drawable)
 
         viewHolder.itemView.setOnClickListener {
-            itemClickListener?.onItemClick(category.id)
+            itemClickListener?.onItemClick(recipe.id)
         }
     }
 

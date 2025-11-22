@@ -1,4 +1,4 @@
-package com.practicum.cookbookapp
+package com.practicum.cookbookapp.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
