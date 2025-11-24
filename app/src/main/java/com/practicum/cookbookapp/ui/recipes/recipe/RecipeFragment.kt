@@ -15,6 +15,8 @@ import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.core.content.edit
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.data.ARG_RECIPE
 import com.practicum.cookbookapp.data.FAVORITES_KEY
@@ -31,6 +33,7 @@ class RecipeFragment : Fragment() {
         )
 
     var recipe: Recipe? = null
+    private val dataModel: RecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,11 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         initRecycler()
+
+        dataModel.liveData.observe(viewLifecycleOwner, Observer {
+            Log.i("!!!", "isFavorite")
+        }
+        )
     }
 
     override fun onDestroyView() {
