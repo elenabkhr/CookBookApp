@@ -1,8 +1,6 @@
 package com.practicum.cookbookapp.ui.recipes.recipe
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,14 +12,9 @@ import androidx.core.content.ContextCompat
 import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.data.ARG_RECIPE
-import com.practicum.cookbookapp.data.FAVORITES_KEY
-import com.practicum.cookbookapp.data.SP_NAME
-import com.practicum.cookbookapp.model.Recipe
 
 class RecipeFragment : Fragment() {
 
@@ -32,11 +25,12 @@ class RecipeFragment : Fragment() {
             "Binding for FragmentRecipeBinding must not be null"
         )
 
-    var recipe: Recipe? = null
+    var recipeId = 0
     private val dataModel: RecipeViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
@@ -45,13 +39,12 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initUI()
         initRecycler()
 
-        dataModel.liveData.observe(viewLifecycleOwner, Observer {
-            Log.i("!!!", "isFavorite")
-        }
-        )
+        recipeId = arguments?.getInt(ARG_RECIPE) ?: 0
+        dataModel.loadRecipe(recipeId)
     }
 
     override fun onDestroyView() {
@@ -60,42 +53,36 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI() {
-        recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
-        } else {
-            arguments?.getParcelable(ARG_RECIPE)
-        }
-        binding.tvRecipe.text = recipe?.title
+        dataModel.liveData.observe(viewLifecycleOwner) { it ->
+            dataModel.loadRecipe(recipeId)
 
-        val drawable = try {
-            Drawable.createFromStream(
-                recipe?.imageUrl?.let { requireContext().assets.open(it) },
-                null
+            binding.tvRecipe.text = it.title
+
+            binding.ibHeart.setImageResource(
+                if (it.isFavorite) (R.drawable.ic_heart)
+                else (R.drawable.ic_heart_empty)
             )
-        } catch (e: Exception) {
-            Log.e("!!!", "Image not found ${recipe?.imageUrl}, $e")
-            null
-        }
-        binding.imRecipe.setImageDrawable(drawable)
 
-        val recipeId = recipe?.id.toString()
-
-        if (getFavorites().contains(recipeId)) {
-            binding.ibHeart.setImageResource(R.drawable.ic_heart)
-        } else {
-            binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
-        }
-
-        binding.ibHeart.setOnClickListener {
-            val favorites = getFavorites()
-            if (favorites.contains(recipeId)) {
-                favorites.remove(recipeId)
-                binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
-            } else {
-                favorites.add(recipeId)
-                binding.ibHeart.setImageResource(R.drawable.ic_heart)
+            val drawable = try {
+                Drawable.createFromStream(
+                    it?.imageUrl?.let { requireContext().assets.open(it) },
+                    null
+                )
+            } catch (e: Exception) {
+                Log.e("!!!", "Image not found ${it?.imageUrl}, $e")
+                null
             }
-            saveFavorites(favorites)
+            binding.imRecipe.setImageDrawable(drawable)
+
+            if (it.isFavorite) {
+                binding.ibHeart.setImageResource(R.drawable.ic_heart)
+            } else {
+                binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
+            }
+
+            binding.ibHeart.setOnClickListener {
+                dataModel.onFavoritesClicked()
+            }
         }
     }
 
@@ -138,18 +125,5 @@ class RecipeFragment : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-    }
-
-    private fun saveFavorites(setStringId: Set<String>) {
-        val sharedPrefs = requireContext().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-        sharedPrefs.edit {
-            putStringSet(FAVORITES_KEY, setStringId)
-        }
-    }
-
-    private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = requireContext().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-        val setString = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
-        return HashSet(setString)
     }
 }
