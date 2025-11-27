@@ -8,57 +8,46 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practicum.cookbookapp.data.FAVORITES_KEY
 import com.practicum.cookbookapp.data.SP_NAME
-import com.practicum.cookbookapp.model.Ingredient
+import com.practicum.cookbookapp.data.STUB
+import com.practicum.cookbookapp.model.Recipe
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
     data class RecipeState(
+        val recipe: Recipe? = null,
         val isLoading: Boolean = false,
-        val imageUrl: String? = null,
-        val title: String? = null,
-        val ingredients: List<Ingredient> = emptyList(),
-        val method: List<String> = emptyList(),
         val isFavorite: Boolean = false,
-        val portions: Int = 1,
+        val portionsCount: Int = 1,
     )
 
-    private val liveDataMutable = MutableLiveData<RecipeState>()
-    val liveData: LiveData<RecipeState> = liveDataMutable
+    private val _liveData = MutableLiveData<RecipeState>()
+    val liveData: LiveData<RecipeState> = _liveData
 
     private val appContext = getApplication<Application>()
-
-    private var recipeId = 0
-    private val favorites = getFavorites().contains(recipeId.toString())
-
-    init {
-        liveDataMutable.value = RecipeState(isFavorite = favorites)
-    }
 
     fun loadRecipe(id: Int) {
         //TODO("load from network")
 
-        this.recipeId = id
-        val isFav = getFavorites().contains(id.toString())
-
-        liveDataMutable.value = RecipeState(
-            isFavorite = isFav,
-            portions = liveDataMutable.value?.portions ?: 1,
+        _liveData.value = RecipeState(
+            recipe = STUB.getRecipeById(id),
+            isFavorite = getFavorites().contains(id.toString()),
+            portionsCount = _liveData.value?.portionsCount ?: 1,
         )
     }
 
     fun onFavoritesClicked() {
-        val favorites = getFavorites()
+        val recipeId = _liveData.value?.recipe?.id
+        val setFavorites = getFavorites()
+        val isFavorite = setFavorites.contains(recipeId.toString())
 
-        val isFav = if (favorites.contains(recipeId.toString())) {
-            favorites.remove(recipeId.toString())
-            false
+        if (isFavorite) {
+            setFavorites.remove(recipeId.toString())
         } else {
-            favorites.add(recipeId.toString())
-            true
+            setFavorites.add(recipeId.toString())
         }
+        saveFavorites(setFavorites)
 
-        saveFavorites(favorites)
-        liveDataMutable.value = liveDataMutable.value?.copy(isFavorite = isFav)
+        _liveData.value = _liveData.value?.copy(isFavorite = !isFavorite)
     }
 
     private fun getFavorites(): MutableSet<String> {

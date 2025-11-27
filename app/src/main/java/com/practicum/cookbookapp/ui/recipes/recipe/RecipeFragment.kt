@@ -19,11 +19,9 @@ import com.practicum.cookbookapp.data.ARG_RECIPE
 class RecipeFragment : Fragment() {
 
     private var _binding: FragmentRecipeBinding? = null
-
     private val binding
-        get() = _binding ?: throw IllegalStateException(
-            "Binding for FragmentRecipeBinding must not be null"
-        )
+        get() = _binding
+            ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
 
     var recipeId = 0
     private val dataModel: RecipeViewModel by activityViewModels()
@@ -53,32 +51,25 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initUI() {
-        dataModel.liveData.observe(viewLifecycleOwner) { it ->
-            dataModel.loadRecipe(recipeId)
+        dataModel.liveData.observe(viewLifecycleOwner) { state ->
 
-            binding.tvRecipe.text = it.title
+            binding.tvRecipe.text = state.recipe?.title.toString()
 
             binding.ibHeart.setImageResource(
-                if (it.isFavorite) (R.drawable.ic_heart)
+                if (state.isFavorite) (R.drawable.ic_heart)
                 else (R.drawable.ic_heart_empty)
             )
 
             val drawable = try {
                 Drawable.createFromStream(
-                    it?.imageUrl?.let { requireContext().assets.open(it) },
+                    state?.let { requireContext().assets.open(it.recipe?.imageUrl.toString()) },
                     null
                 )
             } catch (e: Exception) {
-                Log.e("!!!", "Image not found ${it?.imageUrl}, $e")
+                Log.e("!!!", "Image not found ${state?.recipe?.imageUrl}, $e")
                 null
             }
             binding.imRecipe.setImageDrawable(drawable)
-
-            if (it.isFavorite) {
-                binding.ibHeart.setImageResource(R.drawable.ic_heart)
-            } else {
-                binding.ibHeart.setImageResource(R.drawable.ic_heart_empty)
-            }
 
             binding.ibHeart.setOnClickListener {
                 dataModel.onFavoritesClicked()
@@ -87,43 +78,53 @@ class RecipeFragment : Fragment() {
     }
 
     private fun initRecycler() {
-        val ingredientsAdapter = recipe?.let { IngredientsAdapter(it.ingredients) }
-        binding.rvIngredients.adapter = ingredientsAdapter
+        dataModel.liveData.observe(viewLifecycleOwner) { state ->
 
-        val ingredientsDivider =
-            MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-                dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-                dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
-                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_12)
-                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
-                isLastItemDecorated = false
-            }
-        binding.rvIngredients.addItemDecoration(ingredientsDivider)
+            val ingredientsAdapter = state.recipe?.let { IngredientsAdapter(it.ingredients) }
+            binding.rvIngredients.adapter = ingredientsAdapter
 
-        binding.rvMethod.adapter = recipe?.let { MethodAdapter(it.method) }
-        val methodDivider =
-            MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL).apply {
-                dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-                dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
-                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_12)
-                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
-                isLastItemDecorated = false
-            }
-        binding.rvMethod.addItemDecoration(methodDivider)
+            val ingredientsDivider =
+                MaterialDividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                ).apply {
+                    dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+                    dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+                    dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_12)
+                    dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
+                    isLastItemDecorated = false
+                }
+            binding.rvIngredients.addItemDecoration(ingredientsDivider)
 
-        binding.sbPortions.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar?,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-                binding.tvPortionsCount.text = progress.toString()
-                ingredientsAdapter?.updateIngredients(progress)
-            }
+            binding.rvMethod.adapter =
+                state?.let { it.recipe?.let { it -> MethodAdapter(it.method) } }
+            val methodDivider =
+                MaterialDividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                ).apply {
+                    dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
+                    dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
+                    dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_12)
+                    dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
+                    isLastItemDecorated = false
+                }
+            binding.rvMethod.addItemDecoration(methodDivider)
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+            binding.sbPortions.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    binding.tvPortionsCount.text = progress.toString()
+                    ingredientsAdapter?.updateIngredients(progress)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+        }
     }
 }
