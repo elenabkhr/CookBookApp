@@ -9,13 +9,18 @@ import com.practicum.cookbookapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val dataSet: List<Ingredient>) :
+class IngredientsAdapter(private var dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
     var quantity: Int = 1
 
     fun updateIngredients(progress: Int) {
         quantity = progress
+        notifyDataSetChanged()
+    }
+
+    fun updateDataIngredients(newIngredients: List<Ingredient>) {
+        dataSet = newIngredients
         notifyDataSetChanged()
     }
 
