@@ -1,8 +1,6 @@
 package com.practicum.cookbookapp.ui.recipes.recipe
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -65,16 +63,7 @@ class RecipeFragment : Fragment() {
                 else (R.drawable.ic_heart_empty)
             )
 
-            val drawable = try {
-                Drawable.createFromStream(
-                    state.recipe?.imageUrl.let { requireContext().assets.open(it.toString()) },
-                    null
-                )
-            } catch (e: Exception) {
-                Log.e("!!!", "Image not found ${state?.recipe?.imageUrl}, $e")
-                null
-            }
-            binding.imRecipe.setImageDrawable(drawable)
+            binding.imRecipe.setImageDrawable(state.recipeImage)
 
             ingredientsAdapter.updateDataIngredients(state.recipe?.ingredients ?: emptyList())
             methodAdapter.updateDataMethod(state.recipe?.method ?: emptyList())
@@ -83,7 +72,7 @@ class RecipeFragment : Fragment() {
 
     private fun initRecycler() {
         ingredientsAdapter = IngredientsAdapter(emptyList())
-        binding.rvIngredients.adapter = IngredientsAdapter(emptyList())
+        binding.rvIngredients.adapter = ingredientsAdapter
 
         methodAdapter = MethodAdapter(emptyList())
         binding.rvMethod.adapter = methodAdapter
