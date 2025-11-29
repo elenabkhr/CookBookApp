@@ -2,6 +2,8 @@ package com.practicum.cookbookapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -18,6 +20,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isLoading: Boolean = false,
         val isFavorite: Boolean = false,
         val portionsCount: Int = 1,
+        val recipeImage: Drawable?,
     )
 
     private val _liveData = MutableLiveData<RecipeState>()
@@ -28,10 +31,21 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     fun loadRecipe(id: Int) {
         //TODO("load from network")
 
+        val drawable = try {
+            Drawable.createFromStream(
+                STUB.getRecipeById(id)?.imageUrl?.let { appContext.assets.open(it) },
+                null
+            )
+        } catch (e: Exception) {
+            Log.e("!!!", "Image not found $e")
+            null
+        }
+
         _liveData.value = RecipeState(
             recipe = STUB.getRecipeById(id),
             isFavorite = getFavorites().contains(id.toString()),
             portionsCount = _liveData.value?.portionsCount ?: 1,
+            recipeImage = drawable
         )
     }
 
