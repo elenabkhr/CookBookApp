@@ -65,7 +65,10 @@ class RecipeFragment : Fragment() {
 
             binding.imRecipe.setImageDrawable(state.recipeImage)
 
-            ingredientsAdapter.updateDataIngredients(state.recipe?.ingredients ?: emptyList())
+            ingredientsAdapter.updateDataIngredients(
+                state.recipe?.ingredients ?: emptyList(),
+                state.portionsCount
+            )
             methodAdapter.updateDataMethod(state.recipe?.method ?: emptyList())
         }
     }
@@ -77,7 +80,7 @@ class RecipeFragment : Fragment() {
         methodAdapter = MethodAdapter(emptyList())
         binding.rvMethod.adapter = methodAdapter
 
-        val ingredientsDivider =
+        val divider =
             MaterialDividerItemDecoration(
                 requireContext(),
                 LinearLayoutManager.VERTICAL
@@ -88,20 +91,8 @@ class RecipeFragment : Fragment() {
                 dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
                 isLastItemDecorated = false
             }
-        binding.rvIngredients.addItemDecoration(ingredientsDivider)
-
-        val methodDivider =
-            MaterialDividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-            ).apply {
-                dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_thickness)
-                dividerColor = ContextCompat.getColor(requireContext(), R.color.divider_color)
-                dividerInsetEnd = resources.getDimensionPixelSize(R.dimen.padding_12)
-                dividerInsetStart = resources.getDimensionPixelSize(R.dimen.padding_12)
-                isLastItemDecorated = false
-            }
-        binding.rvMethod.addItemDecoration(methodDivider)
+        binding.rvIngredients.addItemDecoration(divider)
+        binding.rvMethod.addItemDecoration(divider)
     }
 
     private fun initListeners() {
@@ -117,7 +108,7 @@ class RecipeFragment : Fragment() {
                 fromUser: Boolean
             ) {
                 binding.tvPortionsCount.text = progress.toString()
-                ingredientsAdapter.updateIngredients(progress)
+                dataModel.updatePortionsCount(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}

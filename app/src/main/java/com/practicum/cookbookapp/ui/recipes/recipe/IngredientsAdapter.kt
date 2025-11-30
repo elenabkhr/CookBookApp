@@ -14,13 +14,9 @@ class IngredientsAdapter(private var dataSet: List<Ingredient>) :
 
     var quantity: Int = 1
 
-    fun updateIngredients(progress: Int) {
-        quantity = progress
-        notifyDataSetChanged()
-    }
-
-    fun updateDataIngredients(newIngredients: List<Ingredient>) {
+    fun updateDataIngredients(newIngredients: List<Ingredient>, portionsCount: Int) {
         dataSet = newIngredients
+        quantity = portionsCount
         notifyDataSetChanged()
     }
 

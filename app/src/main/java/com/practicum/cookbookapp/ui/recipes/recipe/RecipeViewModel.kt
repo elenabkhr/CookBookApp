@@ -64,6 +64,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         _liveData.value = _liveData.value?.copy(isFavorite = !isFavorite)
     }
 
+    fun updatePortionsCount(portions: Int) {
+        _liveData.value = _liveData.value?.copy(portionsCount = portions)
+    }
+
     private fun getFavorites(): MutableSet<String> {
         val sharedPrefs = appContext.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         val setString = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
