@@ -9,7 +9,7 @@ import com.practicum.cookbookapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private var dataSet: List<Ingredient>) :
+class IngredientsAdapter(var dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
     var quantity: Int = 1
