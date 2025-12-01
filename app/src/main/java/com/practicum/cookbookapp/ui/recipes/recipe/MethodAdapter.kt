@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private var dataSet: List<String>) :
+class MethodAdapter(var dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
     fun updateDataMethod(newMethod: List<String>) {

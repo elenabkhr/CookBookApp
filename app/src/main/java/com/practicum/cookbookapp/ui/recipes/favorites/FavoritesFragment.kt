@@ -69,7 +69,7 @@ class FavoritesFragment : Fragment() {
     private fun openRecipeByRecipeId(recipeId: Int) {
         val recipe = STUB.getRecipeById(recipeId)
         val bundle = Bundle()
-        bundle.putParcelable(ARG_RECIPE, recipe)
+        recipe?.let { bundle.putInt(ARG_RECIPE, it.id) }
 
         parentFragmentManager.commit {
             setReorderingAllowed(true)

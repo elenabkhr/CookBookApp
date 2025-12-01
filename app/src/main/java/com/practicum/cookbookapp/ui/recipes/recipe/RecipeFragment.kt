@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +24,7 @@ class RecipeFragment : Fragment() {
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
 
-    private val dataModel: RecipeViewModel by activityViewModels()
+    private val viewModel: RecipeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,11 +40,11 @@ class RecipeFragment : Fragment() {
 
         recipeId = arguments?.getInt(ARG_RECIPE) ?: 0
 
-        initRecycler()
+        initUI()
         initListeners()
         observeState()
 
-        dataModel.loadRecipe(recipeId)
+        viewModel.loadRecipe(recipeId)
     }
 
     override fun onDestroyView() {
@@ -54,7 +53,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun observeState() {
-        dataModel.liveData.observe(viewLifecycleOwner) { state ->
+        viewModel.liveData.observe(viewLifecycleOwner) { state ->
 
             binding.tvRecipe.text = state.recipe?.title ?: ""
 
@@ -73,7 +72,7 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    private fun initRecycler() {
+    private fun initUI() {
         ingredientsAdapter = IngredientsAdapter(emptyList())
         binding.rvIngredients.adapter = ingredientsAdapter
 
@@ -97,22 +96,14 @@ class RecipeFragment : Fragment() {
 
     private fun initListeners() {
         binding.ibHeart.setOnClickListener {
-            dataModel.onFavoritesClicked()
+            viewModel.onFavoritesClicked()
         }
 
-        binding.sbPortions.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar?,
-                progress: Int,
-                fromUser: Boolean
-            ) {
+        binding.sbPortions.setOnSeekBarChangeListener(
+            PortionSeekBarListener { progress ->
                 binding.tvPortionsCount.text = progress.toString()
-                dataModel.updatePortionsCount(progress)
+                viewModel.updatePortionsCount(progress)
             }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        )
     }
 }
