@@ -1,19 +1,16 @@
 package com.practicum.cookbookapp.ui.recipes.recipe_list
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.ui.recipes.recipe.RecipeFragment
 import com.practicum.cookbookapp.data.ARG_CATEGORY_ID
-import com.practicum.cookbookapp.data.ARG_CATEGORY_IMAGE_URL
-import com.practicum.cookbookapp.data.ARG_CATEGORY_NAME
 import com.practicum.cookbookapp.data.ARG_RECIPE
 import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
@@ -25,9 +22,10 @@ class RecipesListFragment : Fragment() {
             "Binding for FragmentListRecipesBinding must not be null"
         )
 
-    var categoryId: Int? = null
-    var categoryName: String? = null
-    var categoryImageUrl: String? = null
+    var categoryId: Int = 0
+    private lateinit var recipeListAdapter: RecipeListAdapter
+
+    private val viewModel: RecipeListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,23 +38,11 @@ class RecipesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         categoryId = requireArguments().getInt(ARG_CATEGORY_ID)
-        categoryName = requireArguments().getString(ARG_CATEGORY_NAME)
-        categoryImageUrl = requireArguments().getString(ARG_CATEGORY_IMAGE_URL)
-
-        val drawable = try {
-            Drawable.createFromStream(
-                categoryImageUrl?.let { requireContext().assets.open(it) },
-                null
-            )
-        } catch (e: Exception) {
-            Log.e("!!!", "Image not found ${categoryImageUrl}, $e")
-            null
-        }
-
-        binding.imCategory.setImageDrawable(drawable)
-        binding.tvCategory.text = categoryName
-        initRecycler()
+        initUI()
+        observeState()
+        viewModel.loadCategory(categoryId)
     }
 
     override fun onDestroyView() {
@@ -64,11 +50,20 @@ class RecipesListFragment : Fragment() {
         _binding = null
     }
 
-    private fun initRecycler() {
-        val recipeAdapter = RecipeListAdapter(STUB.getRecipesByCategoryId(categoryId))
-        binding.rvCategory.adapter = recipeAdapter
+    private fun observeState() {
+        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+            binding.tvCategory.text = state.category?.title ?: ""
+            binding.imCategory.setImageDrawable(state.categoryImage)
 
-        recipeAdapter.setOnItemClickListener(object :
+            recipeListAdapter.updateListRecipes(STUB.getRecipesByCategoryId(categoryId))
+        }
+    }
+
+    private fun initUI() {
+        recipeListAdapter = RecipeListAdapter(emptyList())
+        binding.rvCategory.adapter = recipeListAdapter
+
+        recipeListAdapter.setOnItemClickListener(object :
             RecipeListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
                 openRecipeByRecipes(recipeId)

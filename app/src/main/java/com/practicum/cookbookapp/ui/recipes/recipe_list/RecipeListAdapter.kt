@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.cookbookapp.databinding.ItemRecipeBinding
 import com.practicum.cookbookapp.model.Recipe
 
-class RecipeListAdapter(private val dataSet: List<Recipe>) :
+class RecipeListAdapter(private var dataSet: List<Recipe>) :
     RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: ItemRecipeBinding) :
@@ -23,6 +23,11 @@ class RecipeListAdapter(private val dataSet: List<Recipe>) :
     }
 
     var itemClickListener: OnItemClickListener? = null
+
+    fun updateListRecipes(listRecipe: List<Recipe>) {
+        dataSet = listRecipe
+        notifyDataSetChanged()
+    }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener

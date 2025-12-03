@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.cookbookapp.databinding.ItemCategoryBinding
 import com.practicum.cookbookapp.model.Category
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(private var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: ItemCategoryBinding) :
@@ -23,6 +23,10 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     }
 
     var itemClickListener: OnItemClickListener? = null
+
+    fun updateCategoriesList(categoriesList: List<Category>) {
+        dataSet = categoriesList
+    }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
