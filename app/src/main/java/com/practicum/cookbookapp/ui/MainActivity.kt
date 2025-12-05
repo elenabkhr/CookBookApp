@@ -5,20 +5,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.navigation.findNavController
 import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.databinding.ActivityMainBinding
-import com.practicum.cookbookapp.ui.categories.CategoriesListFragment
-import com.practicum.cookbookapp.ui.recipes.favorites.FavoritesFragment
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException(
-            "Binding for ActivityMainBinding " +
-                    "must not be null"
+            "Binding for ActivityMainBinding must not be null"
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,26 +32,14 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            add<CategoriesListFragment>(R.id.mainContainer)
-            addToBackStack(null)
-        }
-
         binding.btnNavFavorites.setOnClickListener {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace<FavoritesFragment>(R.id.mainContainer)
-                addToBackStack(null)
-            }
+            findNavController(R.id.mainContainer)
+                .navigate(R.id.favoritesFragment)
         }
 
         binding.btnNavCategories.setOnClickListener {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace<CategoriesListFragment>(R.id.mainContainer)
-                addToBackStack(null)
-            }
+            findNavController(R.id.mainContainer)
+                .navigate(R.id.categoriesListFragment)
         }
     }
 }
