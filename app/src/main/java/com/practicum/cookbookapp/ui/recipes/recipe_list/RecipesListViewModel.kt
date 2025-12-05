@@ -13,9 +13,10 @@ import com.practicum.cookbookapp.model.Recipe
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
     data class RecipesListState(
-        val listRecipes: List<Recipe> = emptyList(),
+        val recipes: List<Recipe> = emptyList(),
         val category: Category?,
         val categoryImage: Drawable?,
+        val openRecipeId: Int? = null,
         val isLoading: Boolean = false,
     )
 
@@ -39,7 +40,11 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         _liveData.value = RecipesListState(
             category = STUB.getCategories().find { it.id == id },
             categoryImage = drawable,
-            listRecipes = STUB.getRecipesByCategoryId(id)
+            recipes = STUB.getRecipesByCategoryId(id)
         )
+    }
+
+    fun onRecipeClick(recipeId: Int) {
+        _liveData.value = _liveData.value?.copy(openRecipeId = recipeId)
     }
 }

@@ -23,9 +23,10 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     val liveData: LiveData<FavoritesState> = _liveData
 
     fun loadFavorites() {
+        val getFavorites = getFavorites().map { it.toInt() }.toSet()
         _liveData.value = FavoritesState(
-            favorites = getFavorites().map { it.toInt() }.toSet(),
-            recipes = STUB.getRecipesByIds(getFavorites().map { it.toInt() }.toSet())
+            favorites = getFavorites,
+            recipes = STUB.getRecipesByIds(getFavorites)
         )
     }
 
