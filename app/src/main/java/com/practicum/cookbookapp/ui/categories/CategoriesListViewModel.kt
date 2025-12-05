@@ -9,7 +9,8 @@ import com.practicum.cookbookapp.model.Category
 class CategoriesListViewModel : ViewModel() {
 
     data class CategoriesListState(
-        val category: List<Category>,
+        val categories: List<Category> = emptyList(),
+        val openCategoryId: Int? = null,
         val isLoading: Boolean = false,
     )
 
@@ -17,6 +18,10 @@ class CategoriesListViewModel : ViewModel() {
     val liveData: LiveData<CategoriesListState> = _liveData
 
     fun loadCategories() {
-        _liveData.value = CategoriesListState(category = STUB.getCategories())
+        _liveData.value = CategoriesListState(categories = STUB.getCategories())
+    }
+
+    fun onCategoryClick(categoryId: Int) {
+        _liveData.value = _liveData.value?.copy(openCategoryId = categoryId)
     }
 }

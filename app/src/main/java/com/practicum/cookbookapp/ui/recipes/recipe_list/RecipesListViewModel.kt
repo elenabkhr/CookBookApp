@@ -8,21 +8,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.model.Category
+import com.practicum.cookbookapp.model.Recipe
 
-class RecipeListViewModel(application: Application) : AndroidViewModel(application) {
+class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
-    data class RecipeListState(
+    data class RecipesListState(
+        val listRecipes: List<Recipe> = emptyList(),
         val category: Category?,
         val categoryImage: Drawable?,
         val isLoading: Boolean = false,
     )
 
-    private val _liveData = MutableLiveData<RecipeListState>()
-    val liveData: LiveData<RecipeListState> = _liveData
+    private val _liveData = MutableLiveData<RecipesListState>()
+    val liveData: LiveData<RecipesListState> = _liveData
 
     private val appContext = getApplication<Application>()
 
-    fun loadCategory(id: Int) {
+    fun loadRecipesList(id: Int) {
         val drawable = try {
             Drawable.createFromStream(
                 STUB.getCategories()
@@ -34,9 +36,10 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
             null
         }
 
-        _liveData.value = RecipeListState(
+        _liveData.value = RecipesListState(
             category = STUB.getCategories().find { it.id == id },
             categoryImage = drawable,
+            listRecipes = STUB.getRecipesByCategoryId(id)
         )
     }
 }

@@ -13,7 +13,6 @@ import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.ui.recipes.recipe.RecipeFragment
 import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipeListAdapter
 import com.practicum.cookbookapp.data.ARG_RECIPE
-import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.databinding.FragmentFavoritesBinding
 import kotlin.getValue
 
@@ -53,8 +52,8 @@ class FavoritesFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             if (state.favorites.isEmpty()) binding.rvFavorites.isVisible = false
             else binding.tvStub.isVisible = false
-
-            favoritesAdapter.updateListRecipes(STUB.getRecipesByIds(state.favorites))
+            favoritesAdapter.updateListRecipes(state.recipes)
+            state.openRecipeId?.let { openRecipeByRecipeId(it) }
         }
     }
 
@@ -65,15 +64,14 @@ class FavoritesFragment : Fragment() {
         favoritesAdapter.setOnItemClickListener(object :
             RecipeListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
-                openRecipeByRecipeId(recipeId)
+                viewModel.onRecipeClick(recipeId)
             }
         })
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
         val bundle = Bundle()
-        recipe?.let { bundle.putInt(ARG_RECIPE, it.id) }
+        bundle.putInt(ARG_RECIPE, recipeId)
 
         parentFragmentManager.commit {
             setReorderingAllowed(true)

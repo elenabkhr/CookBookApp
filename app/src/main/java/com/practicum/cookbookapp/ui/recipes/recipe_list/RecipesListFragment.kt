@@ -25,7 +25,7 @@ class RecipesListFragment : Fragment() {
     var categoryId: Int = 0
     private lateinit var recipeListAdapter: RecipeListAdapter
 
-    private val viewModel: RecipeListViewModel by activityViewModels()
+    private val viewModel: RecipesListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +42,7 @@ class RecipesListFragment : Fragment() {
         categoryId = requireArguments().getInt(ARG_CATEGORY_ID)
         initUI()
         observeState()
-        viewModel.loadCategory(categoryId)
+        viewModel.loadRecipesList(categoryId)
     }
 
     override fun onDestroyView() {
@@ -54,8 +54,7 @@ class RecipesListFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             binding.tvCategory.text = state.category?.title ?: ""
             binding.imCategory.setImageDrawable(state.categoryImage)
-
-            recipeListAdapter.updateListRecipes(STUB.getRecipesByCategoryId(categoryId))
+            recipeListAdapter.updateListRecipes(state.listRecipes)
         }
     }
 

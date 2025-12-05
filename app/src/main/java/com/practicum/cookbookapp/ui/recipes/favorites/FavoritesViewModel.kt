@@ -7,11 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.practicum.cookbookapp.data.FAVORITES_KEY
 import com.practicum.cookbookapp.data.SP_NAME
+import com.practicum.cookbookapp.data.STUB
+import com.practicum.cookbookapp.model.Recipe
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
 
     data class FavoritesState(
-        val favorites: Set<Int>,
+        val recipes: List<Recipe> = emptyList(),
+        val favorites: Set<Int> = emptySet(),
+        val openRecipeId: Int? = null,
         val isLoading: Boolean = false,
     )
 
@@ -19,7 +23,14 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     val liveData: LiveData<FavoritesState> = _liveData
 
     fun loadFavorites() {
-        _liveData.value = FavoritesState(favorites = getFavorites().map { it.toInt() }.toSet())
+        _liveData.value = FavoritesState(
+            favorites = getFavorites().map { it.toInt() }.toSet(),
+            recipes = STUB.getRecipesByIds(getFavorites().map { it.toInt() }.toSet())
+        )
+    }
+
+    fun onRecipeClick(recipeId: Int) {
+        _liveData.value = _liveData.value?.copy(openRecipeId = recipeId)
     }
 
     fun getFavorites(): MutableSet<String> {

@@ -11,7 +11,6 @@ import androidx.fragment.app.commit
 import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipesListFragment
 import com.practicum.cookbookapp.data.ARG_CATEGORY_ID
-import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -47,7 +46,10 @@ class CategoriesListFragment : Fragment() {
 
     private fun observeState() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
-            categoriesListAdapter.updateCategoriesList(state.category)
+            categoriesListAdapter.updateCategoriesList(state.categories)
+            state.openCategoryId?.let { id ->
+                openRecipesByCategoryId(id)
+            }
         }
     }
 
@@ -58,15 +60,14 @@ class CategoriesListFragment : Fragment() {
         categoriesListAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
             override fun onItemClick(categoryId: Int) {
-                openRecipesByCategoryId(categoryId)
+                viewModel.onCategoryClick(categoryId)
             }
         })
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val category = STUB.getCategories().find { it.id == categoryId }
         val bundle = Bundle()
-        category?.let { bundle.putInt(ARG_CATEGORY_ID, it.id) }
+        bundle.putInt(ARG_CATEGORY_ID, categoryId)
 
         parentFragmentManager.commit {
             setReorderingAllowed(true)
