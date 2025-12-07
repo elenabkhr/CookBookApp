@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.practicum.cookbookapp.R
-import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipesListFragment
 import com.practicum.cookbookapp.data.ARG_CATEGORY_ID
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
 
@@ -66,13 +64,9 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val bundle = Bundle()
-        bundle.putInt(ARG_CATEGORY_ID, categoryId)
-
-        parentFragmentManager.commit {
-            setReorderingAllowed(true)
-            add<RecipesListFragment>(R.id.mainContainer, args = bundle)
-            addToBackStack(null)
+        val bundle = Bundle().apply {
+            putInt(ARG_CATEGORY_ID, categoryId)
         }
+        findNavController().navigate(R.id.recipesListFragment, bundle)
     }
 }
