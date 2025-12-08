@@ -10,8 +10,8 @@ import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.practicum.cookbookapp.R
-import com.practicum.cookbookapp.data.ARG_RECIPE
 
 class RecipeFragment : Fragment() {
 
@@ -20,7 +20,7 @@ class RecipeFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not be null")
 
-    private var recipeId = 0
+    private val args: RecipeFragmentArgs by navArgs()
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
 
@@ -38,7 +38,7 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recipeId = arguments?.getInt(ARG_RECIPE) ?: 0
+        val recipeId = args.recipeId
 
         initUI()
         initListeners()
