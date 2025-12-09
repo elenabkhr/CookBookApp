@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
-import com.practicum.cookbookapp.data.ARG_CATEGORY_ID
+import androidx.navigation.fragment.navArgs
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -17,9 +17,8 @@ class RecipesListFragment : Fragment() {
             "Binding for FragmentListRecipesBinding must not be null"
         )
 
-    var categoryId: Int = 0
+    private val args: RecipesListFragmentArgs by navArgs()
     private lateinit var recipeListAdapter: RecipeListAdapter
-
     private val viewModel: RecipesListViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -34,7 +33,7 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        categoryId = requireArguments().getInt(ARG_CATEGORY_ID)
+        val categoryId = args.categoryId
         initUI()
         observeState()
         viewModel.loadRecipesList(categoryId)
