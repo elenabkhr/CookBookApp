@@ -8,9 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipeListAdapter
-import com.practicum.cookbookapp.data.ARG_RECIPE
 import com.practicum.cookbookapp.databinding.FragmentFavoritesBinding
 import kotlin.getValue
 
@@ -68,10 +66,8 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_RECIPE, recipeId)
-        }
-
-        findNavController().navigate(R.id.recipeFragment, bundle)
+        findNavController().navigate(
+            FavoritesFragmentDirections.actionFavoritesFragmentToRecipeFragment(recipeId)
+        )
     }
 }

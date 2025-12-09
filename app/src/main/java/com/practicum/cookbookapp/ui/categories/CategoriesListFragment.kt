@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.practicum.cookbookapp.R
-import com.practicum.cookbookapp.data.ARG_CATEGORY_ID
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -64,9 +62,10 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_CATEGORY_ID, categoryId)
-        }
-        findNavController().navigate(R.id.recipesListFragment, bundle)
+        findNavController().navigate(
+            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                categoryId
+            )
+        )
     }
 }
