@@ -10,7 +10,7 @@ class CategoriesListViewModel : ViewModel() {
 
     data class CategoriesListState(
         val categories: List<Category> = emptyList(),
-        val openCategoryId: Int? = null,
+        val openCategoryId: Category? = null,
         val isLoading: Boolean = false,
     )
 
@@ -22,6 +22,8 @@ class CategoriesListViewModel : ViewModel() {
     }
 
     fun onCategoryClick(categoryId: Int) {
-        _liveData.value = _liveData.value?.copy(openCategoryId = categoryId)
+        val category = STUB.getCategories().find { it.id == categoryId }
+            ?: throw IllegalArgumentException("Category with id:$categoryId not found")
+        _liveData.value = _liveData.value?.copy(openCategoryId = category)
     }
 }
