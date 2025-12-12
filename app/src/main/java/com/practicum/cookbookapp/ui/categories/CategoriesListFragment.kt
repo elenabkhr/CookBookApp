@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
 import com.practicum.cookbookapp.model.Category
 
@@ -45,11 +44,8 @@ class CategoriesListFragment : Fragment() {
     private fun observeState() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             categoriesListAdapter.updateCategoriesList(state.categories)
-            state.openCategoryId?.let { id ->
-                val category =
-                    STUB.getCategories().find { it.id == id }
-                        ?: throw IllegalArgumentException("Category with id:$id not found")
-                openRecipesByCategoryId(category)
+            state.openCategoryId?.let { categoryId ->
+                openRecipesByCategoryId(categoryId)
             }
         }
     }
