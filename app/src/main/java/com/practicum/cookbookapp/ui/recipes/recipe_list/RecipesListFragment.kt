@@ -33,10 +33,10 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val categoryId = args.categoryId
+        val category = args.category
         initUI()
         observeState()
-        viewModel.loadRecipesList(categoryId)
+        viewModel.loadRecipesList(category)
     }
 
     override fun onDestroyView() {

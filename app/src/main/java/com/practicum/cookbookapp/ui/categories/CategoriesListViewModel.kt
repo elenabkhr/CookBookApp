@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.model.Category
-import java.lang.IllegalArgumentException
 
 class CategoriesListViewModel : ViewModel() {
 
@@ -23,10 +22,6 @@ class CategoriesListViewModel : ViewModel() {
     }
 
     fun onCategoryClick(categoryId: Int) {
-        val categories = _liveData.value?.categories.orEmpty()
-
-        if (categories.none { it.id == categoryId })
-            throw IllegalArgumentException("Category with id:$categoryId not found")
-        else _liveData.value = _liveData.value?.copy(openCategoryId = categoryId)
+        _liveData.value = _liveData.value?.copy(openCategoryId = categoryId)
     }
 }
