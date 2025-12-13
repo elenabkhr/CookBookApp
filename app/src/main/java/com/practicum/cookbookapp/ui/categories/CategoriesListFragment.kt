@@ -44,8 +44,8 @@ class CategoriesListFragment : Fragment() {
     private fun observeState() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             categoriesListAdapter.updateCategoriesList(state.categories)
-            state.openCategoryId?.let { categoryId ->
-                openRecipesByCategoryId(categoryId)
+            state.openCategory?.let { category ->
+                openRecipesByCategoryId(category)
             }
         }
     }
