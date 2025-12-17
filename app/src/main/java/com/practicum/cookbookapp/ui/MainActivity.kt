@@ -8,11 +8,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.data.URL_RECIPES_CATEGORY
 import com.practicum.cookbookapp.databinding.ActivityMainBinding
 import com.practicum.cookbookapp.model.Category
+import com.practicum.cookbookapp.model.Recipe
 import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -20,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         get() = _binding ?: throw IllegalStateException(
             "Binding for ActivityMainBinding must not be null"
         )
+
+    val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,22 +43,31 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val thread = Thread(object : Runnable {
-            override fun run() {
-                val url = URL("https://recipes.androidsprint.ru/api/category")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.connect()
+        threadPool.execute {
+            val url = URL(URL_RECIPES_CATEGORY)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.connect()
+            val jsonBody = connection.inputStream.bufferedReader().readText()
+            val categories = Json.decodeFromString<List<Category>>(jsonBody)
+            val categoriesIds = categories.map { it.id }
 
-                val jsonBody = connection.inputStream.bufferedReader().readText()
-                Log.i("!!!", "Body: $jsonBody")
+            for (id in categoriesIds) {
+                threadPool.execute {
+                    val url = URL("$URL_RECIPES_CATEGORY/$id/recipes")
+                    val connection = url.openConnection() as HttpURLConnection
+                    connection.connect()
+                    val jsonBody = connection.inputStream.bufferedReader().readText()
+                    val recipe = Json.decodeFromString<List<Recipe>>(jsonBody)
 
-                val categories = Json.decodeFromString<List<Category>>(jsonBody)
-
-                Log.i("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+                    Log.i(
+                        "!!!",
+                        "threadPool - Выполняю запрос на потоке: ${Thread.currentThread().name}"
+                    )
+                    Log.i("!!!", "Список рецептов: ${recipe.map { it.title }}")
+                }
             }
-        })
-        thread.start()
-        Log.i("!!!", "Метод onCreate() выполняется на потоке: ${Thread.currentThread().name}")
+        }
+        Log.i("!!!", "main - Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
         binding.btnNavFavorites.setOnClickListener {
             findNavController(R.id.mainContainer)
