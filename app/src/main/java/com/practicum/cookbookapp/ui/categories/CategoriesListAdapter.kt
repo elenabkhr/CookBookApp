@@ -26,6 +26,7 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
 
     fun updateCategoriesList(categoriesList: List<Category>) {
         dataSet = categoriesList
+        notifyDataSetChanged()
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {

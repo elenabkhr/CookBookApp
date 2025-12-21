@@ -6,14 +6,16 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.practicum.cookbookapp.data.STUB
+import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
     data class RecipesListState(
-        val recipes: List<Recipe> = emptyList(),
+        val recipes: List<Recipe>? = emptyList(),
         val category: Category?,
         val categoryImage: Drawable?,
         val openRecipeId: Int? = null,
@@ -23,24 +25,32 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     private val _liveData = MutableLiveData<RecipesListState>()
     val liveData: LiveData<RecipesListState> = _liveData
 
+    private val _errorLiveData = MutableLiveData<String>()
+    val errorLiveData: LiveData<String> = _errorLiveData
+
+    private val recipesRepository = RecipesRepository()
+    private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
+
     private val appContext = getApplication<Application>()
 
     fun loadRecipesList(category: Category) {
-        val drawable = try {
-            Drawable.createFromStream(
+        threadPool.execute {
+            val drawable = Drawable.createFromStream(
                 appContext.assets.open(category.imageUrl),
                 null
             )
-        } catch (e: Exception) {
-            Log.e("!!!", "Image not found $e")
-            null
-        }
+            val recipes = recipesRepository.getRecipesByCategoryId(category.id)
 
-        _liveData.value = RecipesListState(
-            category = category,
-            categoryImage = drawable,
-            recipes = STUB.getRecipesByCategoryId(category.id)
-        )
+            if (drawable == null || recipes == null) {
+                Log.e("!!!", "Image not found")
+                _errorLiveData.postValue("Ошибка получения данных")
+                return@execute
+            }
+
+            _liveData.postValue(
+                RecipesListState(category = category, categoryImage = drawable, recipes = recipes)
+            )
+        }
     }
 
     fun onRecipeClick(recipeId: Int) {

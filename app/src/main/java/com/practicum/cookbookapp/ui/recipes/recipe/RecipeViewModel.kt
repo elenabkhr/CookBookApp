@@ -8,10 +8,12 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.FAVORITES_KEY
 import com.practicum.cookbookapp.data.SP_NAME
-import com.practicum.cookbookapp.data.STUB
 import com.practicum.cookbookapp.model.Recipe
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -26,27 +28,39 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _liveData = MutableLiveData<RecipeState>()
     val liveData: LiveData<RecipeState> = _liveData
 
+    private val _errorLiveData = MutableLiveData<String>()
+    val errorLiveData: LiveData<String> = _errorLiveData
+
+    private val recipesRepository = RecipesRepository()
+    private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
+
     private val appContext = getApplication<Application>()
 
     fun loadRecipe(id: Int) {
         //TODO("load from network")
 
-        val drawable = try {
-            Drawable.createFromStream(
-                STUB.getRecipeById(id)?.imageUrl?.let { appContext.assets.open(it) },
+        threadPool.execute {
+            val drawable = Drawable.createFromStream(
+                recipesRepository.getRecipeById(id)?.imageUrl?.let { appContext.assets.open(it) },
                 null
             )
-        } catch (e: Exception) {
-            Log.e("!!!", "Image not found $e")
-            null
-        }
+            val recipe = recipesRepository.getRecipeById(id)
 
-        _liveData.value = RecipeState(
-            recipe = STUB.getRecipeById(id),
-            isFavorite = getFavorites().contains(id.toString()),
-            portionsCount = _liveData.value?.portionsCount ?: 1,
-            recipeImage = drawable
-        )
+            if (drawable == null || recipe == null) {
+                Log.e("!!!", "Image not found")
+                _errorLiveData.postValue("Ошибка получения данных")
+                return@execute
+            }
+
+            _liveData.postValue(
+                RecipeState(
+                    recipe = recipe,
+                    isFavorite = getFavorites().contains(id.toString()),
+                    portionsCount = _liveData.value?.portionsCount ?: 1,
+                    recipeImage = drawable
+                )
+            )
+        }
     }
 
     fun onFavoritesClicked() {

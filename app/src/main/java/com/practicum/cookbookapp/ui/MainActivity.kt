@@ -1,23 +1,13 @@
 package com.practicum.cookbookapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import com.practicum.cookbookapp.R
-import com.practicum.cookbookapp.data.URL_RECIPES_CATEGORY
 import com.practicum.cookbookapp.databinding.ActivityMainBinding
-import com.practicum.cookbookapp.model.Category
-import com.practicum.cookbookapp.model.Recipe
-import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.logging.HttpLoggingInterceptor
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -25,8 +15,6 @@ class MainActivity : AppCompatActivity() {
         get() = _binding ?: throw IllegalStateException(
             "Binding for ActivityMainBinding must not be null"
         )
-
-    val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,43 +31,6 @@ class MainActivity : AppCompatActivity() {
             )
             insets
         }
-
-        threadPool.execute {
-            val logging = HttpLoggingInterceptor()
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-
-            val client = OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build()
-
-            val request: Request = Request.Builder()
-                .url(URL_RECIPES_CATEGORY)
-                .build()
-
-            val response = client.newCall(request).execute()
-            val jsonBody = response.body.use { it.string() }
-            val categories = Json.decodeFromString<List<Category>>(jsonBody)
-            val categoriesIds = categories.map { it.id }
-
-            for (id in categoriesIds) {
-                threadPool.execute {
-                    val request: Request = Request.Builder()
-                        .url("$URL_RECIPES_CATEGORY/$id/recipes")
-                        .build()
-
-                    val response = client.newCall(request).execute()
-                    val jsonBody = response.body.use { it.string() }
-                    val recipe = Json.decodeFromString<List<Recipe>>(jsonBody)
-
-                    Log.i(
-                        "!!!",
-                        "threadPool - Выполняю запрос на потоке: ${Thread.currentThread().name}"
-                    )
-                    Log.i("!!!", "Список рецептов: ${recipe.map { it.title }}")
-                }
-            }
-        }
-        Log.i("!!!", "main - Выполняю запрос на потоке: ${Thread.currentThread().name}")
 
         binding.btnNavFavorites.setOnClickListener {
             findNavController(R.id.mainContainer)

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -48,8 +49,11 @@ class FavoritesFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             if (state.favorites.isEmpty()) binding.rvFavorites.isVisible = false
             else binding.tvStub.isVisible = false
-            favoritesAdapter.updateListRecipes(state.recipes)
+            state.recipes?.let { favoritesAdapter.updateListRecipes(it) }
             state.openRecipeId?.let { openRecipeByRecipeId(it) }
+        }
+        viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
