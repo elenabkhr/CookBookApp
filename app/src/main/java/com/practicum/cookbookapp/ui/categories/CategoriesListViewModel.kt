@@ -3,10 +3,9 @@ package com.practicum.cookbookapp.ui.categories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.practicum.cookbookapp.data.AppExecutors
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.model.Category
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class CategoriesListViewModel : ViewModel() {
 
@@ -23,17 +22,16 @@ class CategoriesListViewModel : ViewModel() {
     val errorLiveData: LiveData<String> = _errorLiveData
 
     private val recipesRepository = RecipesRepository()
-    private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
 
     fun loadCategories() {
-        threadPool.execute {
+        AppExecutors.threadPool.execute {
             _liveData.postValue(CategoriesListState(categories = recipesRepository.getCategories()))
         }
     }
 
     fun onCategoryClick(categoryId: Int) {
-        threadPool.execute {
-            val category = recipesRepository.getCategories()?.find { it.id == categoryId }
+        AppExecutors.threadPool.execute {
+            val category = recipesRepository.getCategoryById(categoryId)
 
             if (category == null) {
                 _errorLiveData.postValue("Ошибка получения данных")

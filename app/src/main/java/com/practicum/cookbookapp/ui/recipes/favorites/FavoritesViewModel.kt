@@ -5,12 +5,11 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.practicum.cookbookapp.data.AppExecutors
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.FAVORITES_KEY
 import com.practicum.cookbookapp.data.SP_NAME
 import com.practicum.cookbookapp.model.Recipe
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,10 +27,9 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     val errorLiveData: LiveData<String> = _errorLiveData
 
     private val recipesRepository = RecipesRepository()
-    private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
 
     fun loadFavorites() {
-        threadPool.execute {
+        AppExecutors.threadPool.execute {
             val getFavorites = getFavorites().map { it.toInt() }.toSet()
             val recipes = recipesRepository.getRecipesByIds(getFavorites)
 

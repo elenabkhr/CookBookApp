@@ -6,11 +6,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.practicum.cookbookapp.data.AppExecutors
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -29,12 +28,10 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     val errorLiveData: LiveData<String> = _errorLiveData
 
     private val recipesRepository = RecipesRepository()
-    private val threadPool: ExecutorService = Executors.newFixedThreadPool(10)
-
     private val appContext = getApplication<Application>()
 
     fun loadRecipesList(category: Category) {
-        threadPool.execute {
+        AppExecutors.threadPool.execute {
             val drawable = Drawable.createFromStream(
                 appContext.assets.open(category.imageUrl),
                 null

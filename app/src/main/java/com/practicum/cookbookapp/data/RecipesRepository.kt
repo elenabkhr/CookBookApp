@@ -34,6 +34,14 @@ class RecipesRepository {
         }
     }
 
+    fun getCategoryById(id: Int): Category? {
+        return try {
+            service.getCategoryById(id).execute().body()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         return try {
             service.getRecipesByCategoryId(categoryId).execute().body()
