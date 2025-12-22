@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +55,6 @@ class RecipeFragment : Fragment() {
 
     private fun observeState() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
-
             binding.tvRecipe.text = state.recipe?.title ?: ""
 
             binding.ibHeart.setImageResource(
@@ -69,6 +69,10 @@ class RecipeFragment : Fragment() {
                 state.portionsCount
             )
             methodAdapter.updateDataMethod(state.recipe?.method ?: emptyList())
+        }
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
