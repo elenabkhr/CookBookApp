@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -34,10 +35,10 @@ class RecipesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val category = args.category
+        val categoryId = args.categoryId
         initUI()
         observeState()
-        viewModel.loadRecipesList(category)
+        viewModel.loadRecipesList(categoryId)
     }
 
     override fun onDestroyView() {
@@ -48,9 +49,13 @@ class RecipesListFragment : Fragment() {
     private fun observeState() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             binding.tvCategory.text = state.category?.title ?: ""
-            binding.imCategory.setImageDrawable(state.categoryImage)
+            state.imageUrl?.let { url ->
+                Glide
+                    .with(this)
+                    .load(url)
+                    .into(binding.imCategory)
+            }
             state.recipes?.let { recipeListAdapter.updateListRecipes(it) }
-            state.openRecipeId?.let { openRecipeByRecipes(it) }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -64,7 +69,7 @@ class RecipesListFragment : Fragment() {
         recipeListAdapter.setOnItemClickListener(object :
             RecipeListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
-                viewModel.onRecipeClick(recipeId)
+                openRecipeByRecipes(recipeId)
             }
         })
     }

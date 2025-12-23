@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.practicum.cookbookapp.R
 
 class RecipeFragment : Fragment() {
@@ -61,9 +62,12 @@ class RecipeFragment : Fragment() {
                 if (state.isFavorite) (R.drawable.ic_heart)
                 else (R.drawable.ic_heart_empty)
             )
-
-            binding.imRecipe.setImageDrawable(state.recipeImage)
-
+            state.imageUrl?.let { url ->
+                Glide
+                    .with(this)
+                    .load(url)
+                    .into(binding.imRecipe)
+            }
             ingredientsAdapter.updateDataIngredients(
                 state.recipe?.ingredients ?: emptyList(),
                 state.portionsCount

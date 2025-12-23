@@ -2,7 +2,6 @@ package com.practicum.cookbookapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
@@ -12,6 +11,7 @@ import com.practicum.cookbookapp.data.AppExecutors
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.FAVORITES_KEY
 import com.practicum.cookbookapp.data.SP_NAME
+import com.practicum.cookbookapp.data.URL_RECIPES
 import com.practicum.cookbookapp.model.Recipe
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -21,7 +21,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isLoading: Boolean = false,
         val isFavorite: Boolean = false,
         val portionsCount: Int = 1,
-        val recipeImage: Drawable?,
+        val imageUrl: String? = null,
     )
 
     private val _liveData = MutableLiveData<RecipeState>()
@@ -35,13 +35,10 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     fun loadRecipe(id: Int) {
         AppExecutors.threadPool.execute {
-            val drawable = Drawable.createFromStream(
-                recipesRepository.getRecipeById(id)?.imageUrl?.let { appContext.assets.open(it) },
-                null
-            )
             val recipe = recipesRepository.getRecipeById(id)
+            val imageUrl = ("$URL_RECIPES/images/${recipe?.imageUrl}")
 
-            if (drawable == null || recipe == null) {
+            if (recipe == null) {
                 Log.e("!!!", "Image not found")
                 _errorLiveData.postValue("Ошибка получения данных")
                 return@execute
@@ -52,7 +49,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     recipe = recipe,
                     isFavorite = getFavorites().contains(id.toString()),
                     portionsCount = _liveData.value?.portionsCount ?: 1,
-                    recipeImage = drawable
+                    imageUrl = imageUrl
                 )
             )
         }

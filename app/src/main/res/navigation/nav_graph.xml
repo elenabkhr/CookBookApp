@@ -67,7 +67,7 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
-            android:name="category"
-            app:argType="com.practicum.cookbookapp.model.Category" />
+            android:name="categoryId"
+            app:argType="integer" />
     </fragment>
 </navigation>

@@ -1,10 +1,11 @@
 package com.practicum.cookbookapp.ui.recipes.recipe_list
 
-import android.graphics.drawable.Drawable
-import android.util.Log
+import com.practicum.cookbookapp.R
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.practicum.cookbookapp.data.URL_RECIPES
 import com.practicum.cookbookapp.databinding.ItemRecipeBinding
 import com.practicum.cookbookapp.model.Recipe
 
@@ -43,16 +44,12 @@ class RecipeListAdapter(private var dataSet: List<Recipe>) :
         val recipe = dataSet[position]
         viewHolder.titleTextView.text = recipe.title
 
-        val drawable = try {
-            Drawable.createFromStream(
-                viewHolder.imageView.context.assets.open(recipe.imageUrl),
-                null
-            )
-        } catch (e: Exception) {
-            Log.e("!!!", "Image not found ${recipe.imageUrl}, $e")
-            null
-        }
-        viewHolder.imageView.setImageDrawable(drawable)
+        Glide
+            .with(viewHolder.itemView)
+            .load(("$URL_RECIPES/images/${recipe.imageUrl}"))
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(viewHolder.imageView)
 
         viewHolder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(recipe.id)

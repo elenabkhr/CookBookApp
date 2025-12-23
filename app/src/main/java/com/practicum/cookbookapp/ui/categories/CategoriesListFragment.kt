@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
-import com.practicum.cookbookapp.model.Category
 
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
@@ -45,9 +44,6 @@ class CategoriesListFragment : Fragment() {
     private fun observeState() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state.categories?.let { categoriesListAdapter.updateCategoriesList(it) }
-            state.openCategory?.let { category ->
-                openRecipesByCategoryId(category)
-            }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -61,15 +57,15 @@ class CategoriesListFragment : Fragment() {
         categoriesListAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
             override fun onItemClick(categoryId: Int) {
-                viewModel.onCategoryClick(categoryId)
+                openRecipesByCategoryId(categoryId)
             }
         })
     }
 
-    private fun openRecipesByCategoryId(category: Category) {
+    private fun openRecipesByCategoryId(categoryId: Int) {
         findNavController().navigate(
             CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                category
+                categoryId
             )
         )
     }

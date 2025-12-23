@@ -50,7 +50,6 @@ class FavoritesFragment : Fragment() {
             if (state.favorites.isEmpty()) binding.rvFavorites.isVisible = false
             else binding.tvStub.isVisible = false
             state.recipes?.let { favoritesAdapter.updateListRecipes(it) }
-            state.openRecipeId?.let { openRecipeByRecipeId(it) }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -64,7 +63,7 @@ class FavoritesFragment : Fragment() {
         favoritesAdapter.setOnItemClickListener(object :
             RecipeListAdapter.OnItemClickListener {
             override fun onItemClick(recipeId: Int) {
-                viewModel.onRecipeClick(recipeId)
+                openRecipeByRecipeId(recipeId)
             }
         })
     }
