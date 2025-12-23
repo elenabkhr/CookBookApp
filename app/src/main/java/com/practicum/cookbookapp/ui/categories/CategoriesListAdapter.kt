@@ -1,10 +1,11 @@
 package com.practicum.cookbookapp.ui.categories
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.data.URL_RECIPES
 import com.practicum.cookbookapp.databinding.ItemCategoryBinding
 import com.practicum.cookbookapp.model.Category
 
@@ -44,16 +45,12 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
         viewHolder.titleTextView.text = category.title
         viewHolder.descriptionTextView.text = category.description
 
-        val drawable = try {
-            Drawable.createFromStream(
-                viewHolder.imageView.context.assets.open(category.imageUrl),
-                null
-            )
-        } catch (e: Exception) {
-            Log.e("!!!", "Image not found ${category.imageUrl}, $e")
-            null
-        }
-        viewHolder.imageView.setImageDrawable(drawable)
+        Glide
+            .with(viewHolder.itemView)
+            .load(("$URL_RECIPES/images/${category.imageUrl}"))
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(viewHolder.imageView)
 
         viewHolder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(category.id)

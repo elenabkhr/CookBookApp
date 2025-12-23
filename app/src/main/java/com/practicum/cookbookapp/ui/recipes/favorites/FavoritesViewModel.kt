@@ -16,7 +16,6 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     data class FavoritesState(
         val recipes: List<Recipe>? = emptyList(),
         val favorites: Set<Int> = emptySet(),
-        val openRecipeId: Int? = null,
         val isLoading: Boolean = false,
     )
 
@@ -40,10 +39,6 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
             _liveData.postValue(FavoritesState(favorites = getFavorites, recipes = recipes))
         }
-    }
-
-    fun onRecipeClick(recipeId: Int) {
-        _liveData.value = _liveData.value?.copy(openRecipeId = recipeId)
     }
 
     fun getFavorites(): MutableSet<String> {
