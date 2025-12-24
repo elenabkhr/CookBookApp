@@ -66,6 +66,8 @@ class RecipeFragment : Fragment() {
                 Glide
                     .with(this)
                     .load(url)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
                     .into(binding.imRecipe)
             }
             ingredientsAdapter.updateDataIngredients(

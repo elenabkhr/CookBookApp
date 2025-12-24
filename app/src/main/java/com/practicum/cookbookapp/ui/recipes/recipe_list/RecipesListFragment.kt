@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -53,6 +54,8 @@ class RecipesListFragment : Fragment() {
                 Glide
                     .with(this)
                     .load(url)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
                     .into(binding.imCategory)
             }
             state.recipes?.let { recipeListAdapter.updateListRecipes(it) }

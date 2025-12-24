@@ -3,9 +3,10 @@ package com.practicum.cookbookapp.ui.categories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.practicum.cookbookapp.data.AppExecutors
+import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.model.Category
+import kotlinx.coroutines.launch
 
 class CategoriesListViewModel : ViewModel() {
 
@@ -23,8 +24,8 @@ class CategoriesListViewModel : ViewModel() {
     private val recipesRepository = RecipesRepository()
 
     fun loadCategories() {
-        AppExecutors.threadPool.execute {
-            _liveData.postValue(CategoriesListState(categories = recipesRepository.getCategories()))
+        viewModelScope.launch {
+            _liveData.value = CategoriesListState(categories = recipesRepository.getCategories())
         }
     }
 }
