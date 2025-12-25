@@ -19,6 +19,7 @@
     <dimen name="width_thumb_seekbar">8dp</dimen>
     <dimen name="height_thumb_seekbar">30dp</dimen>
     <dimen name="size_ib_heart">40dp</dimen>
+    <dimen name="width_ingredients_description">175dp</dimen>
 
     <dimen name="radius_8">8dp</dimen>
     <dimen name="radius_4">4dp</dimen>
