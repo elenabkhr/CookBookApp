@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.practicum.cookbookapp.R
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -21,7 +22,7 @@ class RecipesListFragment : Fragment() {
 
     private val args: RecipesListFragmentArgs by navArgs()
     private lateinit var recipeListAdapter: RecipeListAdapter
-    private val viewModel: RecipesListViewModel by activityViewModels()
+    private val viewModel: RecipesListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +54,8 @@ class RecipesListFragment : Fragment() {
                 Glide
                     .with(this)
                     .load(url)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
                     .into(binding.imCategory)
             }
             state.recipes?.let { recipeListAdapter.updateListRecipes(it) }

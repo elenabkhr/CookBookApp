@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipeListAdapter
 import com.practicum.cookbookapp.databinding.FragmentFavoritesBinding
@@ -21,7 +21,7 @@ class FavoritesFragment : Fragment() {
             "Binding for FragmentFavoritesBinding must not be null"
         )
 
-    private val viewModel: FavoritesViewModel by activityViewModels()
+    private val viewModel: FavoritesViewModel by viewModels()
     private lateinit var favoritesAdapter: RecipeListAdapter
 
     override fun onCreateView(

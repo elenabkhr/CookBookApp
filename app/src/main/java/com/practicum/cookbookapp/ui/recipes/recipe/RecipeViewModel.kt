@@ -7,12 +7,13 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.practicum.cookbookapp.data.AppExecutors
+import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.FAVORITES_KEY
 import com.practicum.cookbookapp.data.SP_NAME
 import com.practicum.cookbookapp.data.URL_RECIPES
 import com.practicum.cookbookapp.model.Recipe
+import kotlinx.coroutines.launch
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -34,23 +35,21 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val appContext = getApplication<Application>()
 
     fun loadRecipe(id: Int) {
-        AppExecutors.threadPool.execute {
+        viewModelScope.launch {
             val recipe = recipesRepository.getRecipeById(id)
             val imageUrl = ("$URL_RECIPES/images/${recipe?.imageUrl}")
 
             if (recipe == null) {
                 Log.e("!!!", "Image not found")
-                _errorLiveData.postValue("Ошибка получения данных")
-                return@execute
+                _errorLiveData.value = "Ошибка получения данных"
+                return@launch
             }
 
-            _liveData.postValue(
-                RecipeState(
-                    recipe = recipe,
-                    isFavorite = getFavorites().contains(id.toString()),
-                    portionsCount = _liveData.value?.portionsCount ?: 1,
-                    imageUrl = imageUrl
-                )
+            _liveData.value = RecipeState(
+                recipe = recipe,
+                isFavorite = getFavorites().contains(id.toString()),
+                portionsCount = _liveData.value?.portionsCount ?: 1,
+                imageUrl = imageUrl
             )
         }
     }

@@ -5,11 +5,12 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.practicum.cookbookapp.data.AppExecutors
+import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.URL_RECIPES
 import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
+import kotlinx.coroutines.launch
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -29,7 +30,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     private val recipesRepository = RecipesRepository()
 
     fun loadRecipesList(categoryId: Int) {
-        AppExecutors.threadPool.execute {
+        viewModelScope.launch {
             val recipes = recipesRepository.getRecipesByCategoryId(categoryId)
             val category = recipesRepository.getCategoryById(categoryId)
 
@@ -37,13 +38,12 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
             if (recipes == null) {
                 Log.e("!!!", "Image not found")
-                _errorLiveData.postValue("Ошибка получения данных")
-                return@execute
+                _errorLiveData.value = "Ошибка получения данных"
+                return@launch
             }
 
-            _liveData.postValue(
+            _liveData.value =
                 RecipesListState(category = category, imageUrl = imageUrl, recipes = recipes)
-            )
         }
     }
 }
