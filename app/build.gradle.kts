@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.glide)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

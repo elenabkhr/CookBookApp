@@ -22,7 +22,7 @@ class RecipesRepository {
     suspend fun getRecipeById(recipeId: Int): Recipe? {
         return withContext(Dispatchers.IO) {
             try {
-                service.getRecipeById(recipeId).execute().body()
+                service.getRecipeById(recipeId)
             } catch (e: Exception) {
                 null
             }
@@ -33,7 +33,7 @@ class RecipesRepository {
         val stringIds = ids.joinToString(",")
         return withContext(Dispatchers.IO) {
             try {
-                service.getRecipesByIds(stringIds).execute().body()
+                service.getRecipesByIds(stringIds)
             } catch (e: Exception) {
                 null
             }
@@ -43,7 +43,7 @@ class RecipesRepository {
     suspend fun getCategoryById(id: Int): Category? {
         return withContext(Dispatchers.IO) {
             try {
-                service.getCategoryById(id).execute().body()
+                service.getCategoryById(id)
             } catch (e: Exception) {
                 null
             }
@@ -53,7 +53,7 @@ class RecipesRepository {
     suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         return withContext(Dispatchers.IO) {
             try {
-                service.getRecipesByCategoryId(categoryId).execute().body()
+                service.getRecipesByCategoryId(categoryId)
             } catch (e: Exception) {
                 null
             }
@@ -63,7 +63,7 @@ class RecipesRepository {
     suspend fun getCategories(): List<Category>? {
         return withContext(Dispatchers.IO) {
             try {
-                service.getCategories().execute().body()
+                service.getCategories()
             } catch (e: Exception) {
                 null
             }
