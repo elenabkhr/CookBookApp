@@ -26,7 +26,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = _errorLiveData
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     fun loadFavorites() {
         viewModelScope.launch {

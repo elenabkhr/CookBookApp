@@ -48,6 +48,7 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 [plugins]
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation" }

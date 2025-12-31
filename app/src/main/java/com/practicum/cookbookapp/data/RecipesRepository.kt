@@ -1,5 +1,7 @@
 package com.practicum.cookbookapp.data
 
+import android.content.Context
+import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
@@ -9,7 +11,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
-class RecipesRepository {
+class RecipesRepository(context: Context) {
     private val contentType = "application/json".toMediaType()
 
     val retrofit: Retrofit = Retrofit.Builder()
@@ -18,6 +20,20 @@ class RecipesRepository {
         .build()
 
     val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
+
+    val db: AppDatabase = Room.databaseBuilder(
+        context.applicationContext,
+        AppDatabase::class.java,
+        "database-categories"
+    ).build()
+
+    val categoriesDao: CategoriesDao = db.categoriesDao()
+
+    suspend fun getCategoriesFromCache(): List<Category> {
+        return withContext(Dispatchers.IO) {
+            categoriesDao.getAll()
+        }
+    }
 
     suspend fun getRecipeById(recipeId: Int): Recipe? {
         return withContext(Dispatchers.IO) {

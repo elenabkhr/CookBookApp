@@ -31,7 +31,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = _errorLiveData
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application.applicationContext)
     private val appContext = getApplication<Application>()
 
     fun loadRecipe(id: Int) {
