@@ -27,7 +27,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = _errorLiveData
 
-    private val recipesRepository = RecipesRepository()
+    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     fun loadRecipesList(categoryId: Int) {
         viewModelScope.launch {
