@@ -24,14 +24,21 @@ class RecipesRepository(context: Context) {
     val db: AppDatabase = Room.databaseBuilder(
         context.applicationContext,
         AppDatabase::class.java,
-        "database-categories"
+        "database"
     ).build()
 
     val categoriesDao: CategoriesDao = db.categoriesDao()
+    val recipesDao: RecipesDao = db.recipesDao()
 
     suspend fun getCategoriesFromCache(): List<Category> {
         return withContext(Dispatchers.IO) {
             categoriesDao.getAll()
+        }
+    }
+
+    suspend fun getRecipesFromCache(): List<Recipe> {
+        return withContext(Dispatchers.IO) {
+            recipesDao.getAll()
         }
     }
 
