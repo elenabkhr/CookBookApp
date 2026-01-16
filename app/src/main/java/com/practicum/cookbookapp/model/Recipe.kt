@@ -15,6 +15,7 @@ data class Recipe(
     @PrimaryKey val id: Int,
     val title: String,
     val imageUrl: String,
+    val categoryId: Int,
 ) : Parcelable {
 
     @IgnoredOnParcel

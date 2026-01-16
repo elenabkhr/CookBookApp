@@ -25,7 +25,8 @@ class RecipesRepository(context: Context) {
         context.applicationContext,
         AppDatabase::class.java,
         "database"
-    ).build()
+    )
+        .build()
 
     val categoriesDao: CategoriesDao = db.categoriesDao()
     val recipesDao: RecipesDao = db.recipesDao()
@@ -36,9 +37,15 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getRecipesFromCache(): List<Recipe> {
+    suspend fun getRecipesFromCache(categoryId: Int): List<Recipe> {
         return withContext(Dispatchers.IO) {
-            recipesDao.getAll()
+            recipesDao.getRecipesByCategoryId(categoryId)
+        }
+    }
+
+    suspend fun insertRecipesIntoCache(recipes: List<Recipe>) {
+        return withContext(Dispatchers.IO) {
+            recipesDao.insertRecipe(recipes)
         }
     }
 

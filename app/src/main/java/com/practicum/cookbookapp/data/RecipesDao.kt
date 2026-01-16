@@ -8,9 +8,9 @@ import com.practicum.cookbookapp.model.Recipe
 
 @Dao
 interface RecipesDao {
-    @Query("SELECT * FROM recipes")
-    suspend fun getAll(): List<Recipe>
+    @Query("SELECT * FROM recipes WHERE categoryId = :categoryId")
+    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(recipes: List<Recipe>)
+    suspend fun insertRecipe(recipes: List<Recipe>)
 }

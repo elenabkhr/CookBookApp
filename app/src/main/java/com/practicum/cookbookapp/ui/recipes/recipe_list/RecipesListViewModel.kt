@@ -31,12 +31,11 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadRecipesList(categoryId: Int) {
         viewModelScope.launch {
-            val recipesFromCache = recipesRepository.getRecipesFromCache()
+            val recipesFromCache = recipesRepository.getRecipesFromCache(categoryId)
             _liveData.value = RecipesListState(recipesFromCache)
 
             val recipesFromBackend = recipesRepository.getRecipesByCategoryId(categoryId)
             val categoryFromBackend = recipesRepository.getCategoryById(categoryId)
-
             val imageUrlFromBackend = ("$URL_RECIPES/images/${categoryFromBackend?.imageUrl}")
 
             if (categoryFromBackend != null) {
@@ -45,6 +44,8 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                     _errorLiveData.value = "Ошибка получения данных"
                     return@launch
                 }
+
+                recipesRepository.insertRecipesIntoCache(recipesFromBackend)
 
                 _liveData.value =
                     RecipesListState(
