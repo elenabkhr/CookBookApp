@@ -31,8 +31,14 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadRecipesList(categoryId: Int) {
         viewModelScope.launch {
-            val recipesFromCache = recipesRepository.getRecipesFromCache(categoryId)
-            _liveData.value = RecipesListState(recipesFromCache)
+            val recipeFromCache = recipesRepository.getRecipesFromCache(categoryId)
+            val categoryFromCache = recipesRepository.getCategoryIdFromCache(categoryId)
+
+            _liveData.value = RecipesListState(
+                recipes = recipeFromCache,
+                category = categoryFromCache,
+                imageUrl = ("$URL_RECIPES/images/${categoryFromCache.imageUrl}")
+            )
 
             val recipesFromBackend = recipesRepository.getRecipesByCategoryId(categoryId)
             val categoryFromBackend = recipesRepository.getCategoryById(categoryId)
@@ -45,7 +51,11 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                     return@launch
                 }
 
-                recipesRepository.insertRecipesIntoCache(recipesFromBackend)
+                val recipesWithCategory = recipesFromBackend.map { recipe ->
+                    recipe.copy(categoryId = categoryFromBackend.id)
+                }
+
+                recipesRepository.insertRecipesIntoCache(recipesWithCategory)
 
                 _liveData.value =
                     RecipesListState(

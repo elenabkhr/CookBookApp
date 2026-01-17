@@ -15,7 +15,7 @@ data class Recipe(
     @PrimaryKey val id: Int,
     val title: String,
     val imageUrl: String,
-    val categoryId: Int,
+    @kotlinx.serialization.Transient val categoryId: Int = 0,
 ) : Parcelable {
 
     @IgnoredOnParcel
