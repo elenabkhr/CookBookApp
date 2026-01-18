@@ -31,19 +31,39 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadRecipesList(categoryId: Int) {
         viewModelScope.launch {
-            val recipes = recipesRepository.getRecipesByCategoryId(categoryId)
-            val category = recipesRepository.getCategoryById(categoryId)
+            val recipeFromCache = recipesRepository.getRecipesFromCache(categoryId)
+            val categoryFromCache = recipesRepository.getCategoryIdFromCache(categoryId)
 
-            val imageUrl = ("$URL_RECIPES/images/${category?.imageUrl}")
+            _liveData.value = RecipesListState(
+                recipes = recipeFromCache,
+                category = categoryFromCache,
+                imageUrl = ("$URL_RECIPES/images/${categoryFromCache.imageUrl}")
+            )
 
-            if (recipes == null) {
-                Log.e("!!!", "Image not found")
-                _errorLiveData.value = "Ошибка получения данных"
-                return@launch
+            val recipesFromBackend = recipesRepository.getRecipesByCategoryId(categoryId)
+            val categoryFromBackend = recipesRepository.getCategoryById(categoryId)
+            val imageUrlFromBackend = ("$URL_RECIPES/images/${categoryFromBackend?.imageUrl}")
+
+            if (categoryFromBackend != null) {
+                if (recipesFromBackend == null) {
+                    Log.e("!!!", "Image not found")
+                    _errorLiveData.value = "Ошибка получения данных"
+                    return@launch
+                }
+
+                val recipesWithCategory = recipesFromBackend.map { recipe ->
+                    recipe.copy(categoryId = categoryFromBackend.id)
+                }
+
+                recipesRepository.insertRecipesIntoCache(recipesWithCategory)
+
+                _liveData.value =
+                    RecipesListState(
+                        category = categoryFromBackend,
+                        imageUrl = imageUrlFromBackend,
+                        recipes = recipesFromBackend
+                    )
             }
-
-            _liveData.value =
-                RecipesListState(category = category, imageUrl = imageUrl, recipes = recipes)
         }
     }
 }
