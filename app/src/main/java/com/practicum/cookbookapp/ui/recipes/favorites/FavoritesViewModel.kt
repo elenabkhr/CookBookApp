@@ -47,7 +47,11 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                 return@launch
             }
 
-            recipesRepository.recipesDao.insertRecipe(recipesFromBackend)
+            val recipesWithFavorites = recipesFromBackend.map { recipe ->
+                recipe.copy(isFavorite = getFavoritesId.contains(recipe.id))
+            }
+
+            recipesRepository.recipesDao.insertRecipe(recipesWithFavorites)
             _liveData.value =
                 FavoritesState(recipes = recipesFromBackend, favorites = getFavoritesId)
         }
