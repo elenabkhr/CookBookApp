@@ -26,6 +26,7 @@ class RecipesRepository(context: Context) {
         AppDatabase::class.java,
         "database"
     )
+        .fallbackToDestructiveMigration()
         .build()
 
     val categoriesDao: CategoriesDao = db.categoriesDao()
@@ -37,7 +38,7 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun getCategoryIdFromCache(categoryId: Int): Category {
+    suspend fun getCategoryFromCache(categoryId: Int): Category {
         return withContext(Dispatchers.IO) {
             categoriesDao.getCategoryById(categoryId)
         }
@@ -49,9 +50,9 @@ class RecipesRepository(context: Context) {
         }
     }
 
-    suspend fun insertRecipesIntoCache(recipes: List<Recipe>) {
+    suspend fun getFavoritesFromCache(): List<Recipe>? {
         return withContext(Dispatchers.IO) {
-            recipesDao.insertRecipe(recipes)
+            recipesDao.getRecipesFavorite()
         }
     }
 

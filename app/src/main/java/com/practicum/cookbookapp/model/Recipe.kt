@@ -15,6 +15,7 @@ data class Recipe(
     @PrimaryKey val id: Int,
     val title: String,
     val imageUrl: String,
+    @kotlinx.serialization.Transient val isFavorite: Boolean = false,
     @kotlinx.serialization.Transient val categoryId: Int = 0,
 ) : Parcelable {
 
