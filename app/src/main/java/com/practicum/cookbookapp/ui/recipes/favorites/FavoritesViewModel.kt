@@ -30,15 +30,30 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadFavorites() {
         viewModelScope.launch {
-            val getFavorites = getFavorites().map { it.toInt() }.toSet()
-            val recipes = recipesRepository.getRecipesByIds(getFavorites)
+            val getFavoritesId = getFavorites().map { it.toInt() }.toSet()
 
-            if (recipes == null) {
+            if (getFavoritesId.isEmpty()) {
+                _liveData.value = FavoritesState(recipes = emptyList(), favorites = emptySet())
+                return@launch
+            }
+
+            val recipesFromCache = recipesRepository.getFavoritesFromCache()
+            _liveData.value = FavoritesState(recipes = recipesFromCache, favorites = getFavoritesId)
+
+            val recipesFromBackend = recipesRepository.getRecipesByIds(getFavoritesId)
+
+            if (recipesFromBackend == null) {
                 _errorLiveData.value = "Ошибка получения данных"
                 return@launch
             }
 
-            _liveData.value = FavoritesState(favorites = getFavorites, recipes = recipes)
+            val recipesWithFavorites = recipesFromBackend.map { recipe ->
+                recipe.copy(isFavorite = getFavoritesId.contains(recipe.id))
+            }
+
+            recipesRepository.recipesDao.insertRecipe(recipesWithFavorites)
+            _liveData.value =
+                FavoritesState(recipes = recipesFromBackend, favorites = getFavoritesId)
         }
     }
 

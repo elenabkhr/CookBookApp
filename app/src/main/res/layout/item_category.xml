@@ -31,8 +31,11 @@
             style="@style/StyleTitleCard14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_8"
+            android:layout_marginHorizontal="@dimen/padding_8"
             android:layout_marginTop="@dimen/padding_8"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivCardCategories"
             tools:text="Название" />

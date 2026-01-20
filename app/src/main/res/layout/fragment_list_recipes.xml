@@ -23,11 +23,14 @@
             style="@style/StyleTitle20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_16"
+            android:layout_marginHorizontal="@dimen/padding_16"
             android:layout_marginBottom="@dimen/padding_16"
             android:background="@drawable/shape_rounded_categories"
             android:padding="@dimen/padding_10"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/title_categories" />
     </androidx.constraintlayout.widget.ConstraintLayout>
