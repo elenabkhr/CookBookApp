@@ -46,7 +46,7 @@ class RecipeListAdapter(private var dataSet: List<Recipe>) :
 
         Glide
             .with(viewHolder.itemView)
-            .load(("$URL_RECIPES/images/${recipe.imageUrl}"))
+            .load(("${URL_RECIPES}images/${recipe.imageUrl}"))
             .placeholder(R.drawable.img_placeholder)
             .error(R.drawable.img_error)
             .into(viewHolder.imageView)

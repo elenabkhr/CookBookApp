@@ -15,5 +15,5 @@ interface RecipesDao {
     suspend fun getRecipesFavorite(): List<Recipe>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipe(recipes: List<Recipe>)
+    suspend fun insertRecipesIntoCache(recipes: List<Recipe>)
 }

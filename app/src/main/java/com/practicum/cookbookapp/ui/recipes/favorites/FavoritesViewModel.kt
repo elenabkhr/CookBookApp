@@ -1,18 +1,14 @@
 package com.practicum.cookbookapp.ui.recipes.favorites
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
-import com.practicum.cookbookapp.data.FAVORITES_KEY
-import com.practicum.cookbookapp.data.SP_NAME
 import com.practicum.cookbookapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(application: Application) : AndroidViewModel(application) {
+class FavoritesViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
 
     data class FavoritesState(
         val recipes: List<Recipe>? = emptyList(),
@@ -26,11 +22,10 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = _errorLiveData
 
-    private val recipesRepository = RecipesRepository(application.applicationContext)
 
     fun loadFavorites() {
         viewModelScope.launch {
-            val getFavoritesId = getFavorites().map { it.toInt() }.toSet()
+            val getFavoritesId = recipesRepository.getFavorites().map { it.toInt() }.toSet()
 
             if (getFavoritesId.isEmpty()) {
                 _liveData.value = FavoritesState(recipes = emptyList(), favorites = emptySet())
@@ -51,16 +46,9 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                 recipe.copy(isFavorite = getFavoritesId.contains(recipe.id))
             }
 
-            recipesRepository.recipesDao.insertRecipe(recipesWithFavorites)
+            recipesRepository.insertRecipesIntoCache(recipesWithFavorites)
             _liveData.value =
-                FavoritesState(recipes = recipesFromBackend, favorites = getFavoritesId)
+                FavoritesState(recipes = recipesWithFavorites, favorites = getFavoritesId)
         }
-    }
-
-    fun getFavorites(): MutableSet<String> {
-        val sharedPrefs =
-            getApplication<Application>().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-        val setString = sharedPrefs.getStringSet(FAVORITES_KEY, emptySet()) ?: emptySet()
-        return HashSet(setString)
     }
 }

@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.practicum.cookbookapp.RecipesApplication
 import com.practicum.cookbookapp.ui.recipes.recipe_list.RecipeListAdapter
 import com.practicum.cookbookapp.databinding.FragmentFavoritesBinding
-import kotlin.getValue
 
 class FavoritesFragment : Fragment() {
 
@@ -21,8 +20,15 @@ class FavoritesFragment : Fragment() {
             "Binding for FragmentFavoritesBinding must not be null"
         )
 
-    private val viewModel: FavoritesViewModel by viewModels()
+    private lateinit var favoritesViewModel: FavoritesViewModel
     private lateinit var favoritesAdapter: RecipeListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        favoritesViewModel = appContainer.favoritesViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +43,7 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         observeState()
-        viewModel.loadFavorites()
+        favoritesViewModel.loadFavorites()
     }
 
     override fun onDestroyView() {
@@ -46,12 +52,12 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun observeState() {
-        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+        favoritesViewModel.liveData.observe(viewLifecycleOwner) { state ->
             if (state.favorites.isEmpty()) binding.rvFavorites.isVisible = false
             else binding.tvStub.isVisible = false
             state.recipes?.let { favoritesAdapter.updateListRecipes(it) }
         }
-        viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
+        favoritesViewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }

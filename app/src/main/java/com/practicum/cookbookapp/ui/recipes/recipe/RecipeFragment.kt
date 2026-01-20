@@ -10,10 +10,10 @@ import androidx.core.content.ContextCompat
 import com.practicum.cookbookapp.databinding.FragmentRecipeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.RecipesApplication
 
 class RecipeFragment : Fragment() {
 
@@ -26,7 +26,14 @@ class RecipeFragment : Fragment() {
     private lateinit var ingredientsAdapter: IngredientsAdapter
     private lateinit var methodAdapter: MethodAdapter
 
-    private val viewModel: RecipeViewModel by viewModels()
+    private lateinit var recipeViewModel: RecipeViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        recipeViewModel = appContainer.recipeViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +53,7 @@ class RecipeFragment : Fragment() {
         initListeners()
         observeState()
 
-        viewModel.loadRecipe(recipeId)
+        recipeViewModel.loadRecipe(recipeId)
     }
 
     override fun onDestroyView() {
@@ -55,7 +62,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun observeState() {
-        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+        recipeViewModel.liveData.observe(viewLifecycleOwner) { state ->
             binding.tvRecipe.text = state.recipe?.title ?: ""
 
             binding.ibHeart.setImageResource(
@@ -77,7 +84,7 @@ class RecipeFragment : Fragment() {
             methodAdapter.updateDataMethod(state.recipe?.method ?: emptyList())
         }
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
+        recipeViewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
@@ -106,13 +113,13 @@ class RecipeFragment : Fragment() {
 
     private fun initListeners() {
         binding.ibHeart.setOnClickListener {
-            viewModel.onFavoritesClicked()
+            recipeViewModel.onFavoritesClicked()
         }
 
         binding.sbPortions.setOnSeekBarChangeListener(
             PortionSeekBarListener { progress ->
                 binding.tvPortionsCount.text = progress.toString()
-                viewModel.updatePortionsCount(progress)
+                recipeViewModel.updatePortionsCount(progress)
             }
         )
     }

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.practicum.cookbookapp.RecipesApplication
 import com.practicum.cookbookapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -17,8 +17,15 @@ class CategoriesListFragment : Fragment() {
             "Binding for FragmentListCategoriesBinding must not be null"
         )
 
+    private lateinit var categoriesListViewModel: CategoriesListViewModel
     private lateinit var categoriesListAdapter: CategoriesListAdapter
-    private val viewModel: CategoriesListViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        categoriesListViewModel = appContainer.categoriesListViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +40,7 @@ class CategoriesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         observeState()
-        viewModel.loadCategories()
+        categoriesListViewModel.loadCategories()
     }
 
     override fun onDestroyView() {
@@ -42,10 +49,10 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun observeState() {
-        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+        categoriesListViewModel.categoriesState.observe(viewLifecycleOwner) { state ->
             state.categories?.let { categoriesListAdapter.updateCategoriesList(it) }
         }
-        viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
+        categoriesListViewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
