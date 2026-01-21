@@ -15,5 +15,5 @@ interface CategoriesDao {
     suspend fun getCategoryById(categoryId: Int): Category
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(categories: List<Category>)
+    suspend fun insertCategoriesIntoCache(categories: List<Category>)
 }

@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.practicum.cookbookapp.R
+import com.practicum.cookbookapp.RecipesApplication
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
 
 class RecipesListFragment : Fragment() {
@@ -20,9 +20,17 @@ class RecipesListFragment : Fragment() {
             "Binding for FragmentListRecipesBinding must not be null"
         )
 
+    private lateinit var recipesListViewModel: RecipesListViewModel
+
     private val args: RecipesListFragmentArgs by navArgs()
     private lateinit var recipeListAdapter: RecipeListAdapter
-    private val viewModel: RecipesListViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        recipesListViewModel = appContainer.recipeListViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +47,7 @@ class RecipesListFragment : Fragment() {
         val categoryId = args.categoryId
         initUI()
         observeState()
-        viewModel.loadRecipesList(categoryId)
+        recipesListViewModel.loadRecipesList(categoryId)
     }
 
     override fun onDestroyView() {
@@ -48,7 +56,7 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun observeState() {
-        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+        recipesListViewModel.liveData.observe(viewLifecycleOwner) { state ->
             binding.tvCategory.text = state.category?.title ?: ""
             state.imageUrl?.let { url ->
                 Glide
@@ -60,7 +68,7 @@ class RecipesListFragment : Fragment() {
             }
             state.recipes?.let { recipeListAdapter.updateListRecipes(it) }
         }
-        viewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
+        recipesListViewModel.errorLiveData.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }

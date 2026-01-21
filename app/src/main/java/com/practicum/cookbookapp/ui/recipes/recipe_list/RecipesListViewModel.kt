@@ -1,10 +1,9 @@
 package com.practicum.cookbookapp.ui.recipes.recipe_list
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.URL_RECIPES
@@ -12,7 +11,7 @@ import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
+class RecipesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
 
     data class RecipesListState(
         val recipes: List<Recipe>? = emptyList(),
@@ -27,8 +26,6 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = _errorLiveData
 
-    private val recipesRepository = RecipesRepository(application.applicationContext)
-
     fun loadRecipesList(categoryId: Int) {
         viewModelScope.launch {
             val recipesFromCache = recipesRepository.getRecipesFromCache(categoryId)
@@ -42,7 +39,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
             val recipesFromBackend = recipesRepository.getRecipesByCategoryId(categoryId)
             val categoryFromBackend = recipesRepository.getCategoryById(categoryId)
-            val imageUrlFromBackend = ("$URL_RECIPES/images/${categoryFromBackend?.imageUrl}")
+            val imageUrlFromBackend = ("${URL_RECIPES}images/${categoryFromBackend?.imageUrl}")
 
             if (categoryFromBackend != null) {
                 if (recipesFromBackend == null) {
@@ -55,7 +52,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                     recipe.copy(categoryId = categoryFromBackend.id)
                 }
 
-                recipesRepository.recipesDao.insertRecipe(recipesWithCategory)
+                recipesRepository.insertRecipesIntoCache(recipesWithCategory)
 
                 _liveData.value =
                     RecipesListState(

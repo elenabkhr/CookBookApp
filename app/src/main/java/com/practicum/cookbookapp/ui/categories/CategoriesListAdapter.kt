@@ -47,7 +47,7 @@ class CategoriesListAdapter(private var dataSet: List<Category>) :
 
         Glide
             .with(viewHolder.itemView)
-            .load(("$URL_RECIPES/images/${category.imageUrl}"))
+            .load(("${URL_RECIPES}images/${category.imageUrl}"))
             .placeholder(R.drawable.img_placeholder)
             .error(R.drawable.img_error)
             .into(viewHolder.imageView)
