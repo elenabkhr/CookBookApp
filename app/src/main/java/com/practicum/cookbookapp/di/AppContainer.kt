@@ -7,57 +7,64 @@ import com.practicum.cookbookapp.data.AppDatabase
 import com.practicum.cookbookapp.data.CategoriesDao
 import com.practicum.cookbookapp.data.RecipeApiService
 import com.practicum.cookbookapp.data.RecipesDao
-import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.URL_RECIPES
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class AppContainer(context: Context) {
-    private val db: AppDatabase = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java,
-        "database"
-    )
-        .fallbackToDestructiveMigration()
-        .build()
+@Module
+@InstallIn(SingletonComponent::class)
+class RecipeModule() {
 
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-    private val categoriesDao: CategoriesDao = db.categoriesDao()
-    private val recipesDao: RecipesDao = db.recipesDao()
+    @Provides
+    fun providesContext(@ApplicationContext context: Context): Context = context
 
-    private val logging = HttpLoggingInterceptor()
-        .apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
+    @Provides
+    fun providesDatabase(@ApplicationContext context: Context): AppDatabase =
+        Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "database"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(logging)
-        .build()
+    @Provides
+    fun providesCategoriesDao(appDatabase: AppDatabase): CategoriesDao = appDatabase.categoriesDao()
 
-    private val contentType = "application/json".toMediaType()
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(URL_RECIPES)
-        .addConverterFactory(Json.asConverterFactory(contentType))
-        .client(client)
-        .build()
+    @Provides
+    fun providesRecipesDao(appDatabase: AppDatabase): RecipesDao = appDatabase.recipesDao()
 
-    private val recipeApiService: RecipeApiService = retrofit.create(RecipeApiService::class.java)
+    @Provides
+    fun providesHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor()
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-    val repository = RecipesRepository(
-        context = context.applicationContext,
-        recipesDao = recipesDao,
-        categoriesDao = categoriesDao,
-        recipeApiService = recipeApiService,
-        ioDispatcher = ioDispatcher,
-    )
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
+    }
 
-    val categoriesListViewModelFactory = CategoriesListViewModelFactory(repository)
-    val favoritesViewModelFactory = FavoritesViewModelFactory(repository)
-    val recipeViewModelFactory = RecipeViewModelFactory(repository)
-    val recipeListViewModelFactory = RecipeListViewModelFactory(repository)
+    @Provides
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val contentType = "application/json".toMediaType()
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(URL_RECIPES)
+            .addConverterFactory(Json.asConverterFactory(contentType))
+            .client(okHttpClient)
+            .build()
+        return retrofit
+    }
+
+    @Provides
+    fun providesApiService(retrofit: Retrofit): RecipeApiService {
+        return retrofit.create(RecipeApiService::class.java)
+    }
 }
