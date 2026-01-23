@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel

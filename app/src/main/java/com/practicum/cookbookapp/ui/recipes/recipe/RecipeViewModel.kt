@@ -9,7 +9,7 @@ import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.URL_RECIPES
 import com.practicum.cookbookapp.model.Recipe
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel

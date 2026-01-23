@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.core.content.edit
 import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
