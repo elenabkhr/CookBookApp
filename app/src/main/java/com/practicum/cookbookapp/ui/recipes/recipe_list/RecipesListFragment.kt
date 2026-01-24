@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.practicum.cookbookapp.R
-import com.practicum.cookbookapp.RecipesApplication
 import com.practicum.cookbookapp.databinding.FragmentListRecipesBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
     private val binding
@@ -20,17 +22,10 @@ class RecipesListFragment : Fragment() {
             "Binding for FragmentListRecipesBinding must not be null"
         )
 
-    private lateinit var recipesListViewModel: RecipesListViewModel
-
+    private val recipesListViewModel: RecipesListViewModel by viewModels()
     private val args: RecipesListFragmentArgs by navArgs()
     private lateinit var recipeListAdapter: RecipeListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val appContainer = (requireActivity().application as RecipesApplication).appContainer
-        recipesListViewModel = appContainer.recipeListViewModelFactory.create()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

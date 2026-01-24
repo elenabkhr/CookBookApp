@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavoritesViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(
+    private val recipesRepository: RecipesRepository,
+) : ViewModel() {
 
     data class FavoritesState(
         val recipes: List<Recipe>? = emptyList(),
@@ -21,7 +26,6 @@ class FavoritesViewModel(private val recipesRepository: RecipesRepository) : Vie
 
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = _errorLiveData
-
 
     fun loadFavorites() {
         viewModelScope.launch {

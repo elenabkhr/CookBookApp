@@ -8,9 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.cookbookapp.data.RecipesRepository
 import com.practicum.cookbookapp.data.URL_RECIPES
 import com.practicum.cookbookapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
-class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(
+    private val recipesRepository: RecipesRepository,
+) : ViewModel() {
 
     data class RecipeState(
         val recipe: Recipe? = null,

@@ -1,19 +1,24 @@
 package com.practicum.cookbookapp.data
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
-import kotlinx.coroutines.CoroutineDispatcher
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
-class RecipesRepository(
-    private val context: Context,
+class RecipesRepository @Inject constructor(
+    @param:ApplicationContext private val context: Context,
     private val recipesDao: RecipesDao,
     private val categoriesDao: CategoriesDao,
     private val recipeApiService: RecipeApiService,
-    private val ioDispatcher: CoroutineDispatcher,
 ) {
+
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO
 
     suspend fun getCategoriesFromCache(): List<Category> {
         return withContext(ioDispatcher) {
@@ -56,27 +61,30 @@ class RecipesRepository(
             try {
                 recipeApiService.getRecipeById(recipeId)
             } catch (e: Exception) {
+                Log.e("RecipesRepository", "Failed to get recipe by id", e)
                 null
             }
         }
     }
 
-    suspend fun getRecipesByIds(ids: Set<Int>): List<Recipe>? {
-        val stringIds = ids.joinToString(",")
+    suspend fun getRecipesByIds(recipesId: Set<Int>): List<Recipe>? {
+        val stringIds = recipesId.joinToString(",")
         return withContext(ioDispatcher) {
             try {
                 recipeApiService.getRecipesByIds(stringIds)
             } catch (e: Exception) {
+                Log.e("RecipesRepository", "Failed to get recipes by ids", e)
                 null
             }
         }
     }
 
-    suspend fun getCategoryById(id: Int): Category? {
+    suspend fun getCategoryById(categoryId: Int): Category? {
         return withContext(ioDispatcher) {
             try {
-                recipeApiService.getCategoryById(id)
+                recipeApiService.getCategoryById(categoryId)
             } catch (e: Exception) {
+                Log.e("RecipesRepository", "Failed to get category by id", e)
                 null
             }
         }
@@ -87,6 +95,7 @@ class RecipesRepository(
             try {
                 recipeApiService.getRecipesByCategoryId(categoryId)
             } catch (e: Exception) {
+                Log.e("RecipesRepository", "Failed to get recipes by category id", e)
                 null
             }
         }
@@ -97,6 +106,7 @@ class RecipesRepository(
             try {
                 recipeApiService.getCategories()
             } catch (e: Exception) {
+                Log.e("RecipesRepository", "Failed to get categories", e)
                 null
             }
         }
