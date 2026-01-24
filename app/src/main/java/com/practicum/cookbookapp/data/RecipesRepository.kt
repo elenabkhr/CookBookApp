@@ -5,13 +5,14 @@ import android.util.Log
 import androidx.core.content.edit
 import com.practicum.cookbookapp.model.Category
 import com.practicum.cookbookapp.model.Recipe
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 class RecipesRepository @Inject constructor(
-    private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val recipesDao: RecipesDao,
     private val categoriesDao: CategoriesDao,
     private val recipeApiService: RecipeApiService,
